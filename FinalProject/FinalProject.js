@@ -1,8 +1,8 @@
-import * as THREE from '/sources/three/build/three.module.js';
-import { OrbitControls } from './sources/three/examples/jsm/controls/OrbitControls.js';
-import {GLTFLoader} from './sources/three/examples/jsm/loaders/GLTFLoader.js';
-import {GUI} from "./sources/three/examples/jsm/libs/dat.gui.module.js"
-import {TWEEN} from "./sources/three/examples/jsm/libs/tween.module.min.js"
+import * as THREE from '../resources/three/build/three.module.js';
+import { OrbitControls } from '../resources/three/examples/jsm/controls/OrbitControls.js';
+import {GLTFLoader} from '../resources/three/examples/jsm/loaders/GLTFLoader.js';
+import {GUI} from "../resources/three/examples/jsm/libs/dat.gui.module.js"
+import {TWEEN} from "../resources/three/examples/jsm/libs/tween.module.min.js"
 import {Player} from "./Player.js"
 
 window.onload = loadScene();
