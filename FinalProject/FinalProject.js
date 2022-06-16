@@ -11,7 +11,7 @@ window.onload = loadScene();
 function loadScene(){
     THREE.Cache.enabled = false;
     const loader = new THREE.ObjectLoader();
-    loader.load(('scenes/scene.json'), function (scene) {init(scene)});
+    loader.load(('scenes/scene1.json'), function (scene) {init(scene)});
     //loader.load(('scenes/PlanetSystem.json'), function (scene) {init(scene)});
     //loader.load(('scenes/CharacterAnimation.json'), function (scene) {init(scene)});
 
@@ -36,15 +36,18 @@ function init(scene){
 
 //  Set the Astronaut as Player:
     const astronaut = scene.getObjectByName("Astronaut");
+    let names = []
+    getChildrenNames(astronaut)
+    console.log(names)
     const player = new Player(astronaut);
-//  Set the lightTarget of the astronaut.    
-    const lightTarget = new THREE.Object3D();
-    astronaut.getObjectByName("Head").add(lightTarget);
-    lightTarget.position.set(0,0.2,1);
-    astronaut.getObjectByName("lightEye").target = lightTarget;
-    //astronaut.lookAt(0,0,0);
-    //astronaut.rotation.x -= Math.PI/2;
+    let dirX = new THREE.Vector3( 1, 0, 0 );
+    let dirY = new THREE.Vector3( 0, 1, 0 );
+    let dirZ = new THREE.Vector3( 0, 0, 1 );
 
+//  Planet Configuration:
+    let planetParamas = {x: 0, y: 0}
+    // const tweenTurnBack = new TWEEN.Tween(planetParams).to({y: '+3.1415'}, 400).delay(400)
+    const tweenTurnBack = new TWEEN.Tween(scene.getObjectByName("Planet").rotation).to({y: '+3.1415'}, 400).delay(400)
 
 //  Set the box for orientation:  
     const box = scene.getObjectByName("Box");
@@ -53,6 +56,7 @@ function init(scene){
     box.lookAt(0,0,0);
 
 //  Function calls:
+    configureInputs();
     setArrowHelpers();
     guiOptions();
     render();
@@ -62,14 +66,44 @@ function init(scene){
         camera.updateProjectionMatrix();
         player.update();
         orbits();
+        // TWEEN.update();
         renderer.render(scene, camera);
 
     }
 
+    function getChildrenNames(obj) {
+        names.push(obj.name)
+        if (Array.isArray(obj.children) && obj.children.length){
+            for(let child of obj.children){
+                getChildrenNames(child)
+            }
+        }
+    }
+
+    function configureInputs() {
+        //TODO: Configure global keyboard inputs...
+        window.addEventListener('keydown', (e) => {
+            switch(e.code){
+                case('KeyS'):
+                    // tweenTurnBack.start()
+                    dirX = dirX.negate()
+            }
+        })
+        window.addEventListener('keyUp', (e) => {
+            switch(e.code){
+                
+            }
+        })
+
+    }
+
     function orbits(t){
-//      Stars Revoluntion and Universe Rotation. 
+//      Compute Planet Rotation, Stars Revolution and Universe Rotation. 
+        
         scene.getObjectByName("Stars").rotateY(0.005);
         scene.getObjectByName("Universe").rotateX(-0.0005);
+        if (player.dY !=0 ) scene.getObjectByName("Planet").rotateOnWorldAxis(dirY, player.dY);
+        if (player.dX != 0) scene.getObjectByName("Planet").rotateOnWorldAxis(dirX,player.dX);
     }
 
     function setArrowHelpers(){
@@ -115,7 +149,9 @@ function init(scene){
             if (light.name == 'lightEye') {
                 lightFolder.add(light, 'angle', 0, 1.57);
                 lightFolder.add(light, 'penumbra', 0, 1);
+
                 const targetFolder = lightFolder.addFolder("Target");
+                const lightTarget = astronaut.getObjectByName("lightTarget");
                 targetFolder.add(lightTarget.position, 'x', 0,10);
                 targetFolder.add(lightTarget.position, 'y', 0,10);
                 targetFolder.add(lightTarget.position, 'z', 0,10);
