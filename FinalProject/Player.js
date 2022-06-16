@@ -36,7 +36,7 @@ export class Player {
         for (const [name, clip] of Object.entries(Data[this.name].animations)) {
             let joints = [];
             clip.joints.forEach((joint, i) => {
-                if (joint=='radius') joints.push(this.spherical)
+                if (joint=='radius') joints.push(this.model.getObjectByName('root').position)
                 else joints.push(obj.getObjectByName(joint).rotation)
             });
             this.animations[name] = new Animation(name, joints, clip.frames, clip.periods, clip.repeat, clip.delay, clip.reset);
@@ -46,19 +46,19 @@ export class Player {
         window.addEventListener('keydown', (e) => {
             switch(e.code){
                 case "KeyW":
-                    this.dX = 0.005;
+                    this.dX = +0.005;
                     this.animations.Walk.repeat = true;
                     this.animations.Walk.start();
                 break;
                 case "KeyA":
-                    if (this.dY >= 0.0){
-                        this.dY = -0.03;
+                    if (this.dY <= 0.0){
+                        this.dY = 0.03;
                         this.animations.TurnLeft.start();
                     }
                 break;
                 case "KeyD":
-                    if (this.dY <= 0.0){
-                        this.dY = 0.03;
+                    if (this.dY >= 0.0){
+                        this.dY = -0.03;
                         this.animations.TurnRight.start();
                     }
                 break;
@@ -67,6 +67,8 @@ export class Player {
                     // this.dX = -0.0025;
                     // this.animations.Walk.start();
                     this.animations.TurnBack.start();
+                    this.dirX = this.dirX.applyAxisAngle(this.dirY, 3.1415)
+                    // this.dirY.negate();
                 break;
                 case "KeyJ":
                     this.animations.Jump.start();
@@ -108,7 +110,16 @@ export class Player {
     }
 
     update() {
-        this.model.position.setFromSpherical(this.spherical);
+//      Compute Momevent:
+        if(this.dY!=0){
+            this.model.rotateOnWorldAxis(this.dirY, this.dY)
+            this.dirX = this.dirX.applyAxisAngle(this.dirY, this.dY)
+        }
+        if(this.dX!=0){
+            this.model.rotateOnWorldAxis(this.dirX, this.dX) 
+            this.dirY = this.dirY.applyAxisAngle(this.dirX, this.dX)
+        }
+        // this.model.position.setFromSpherical(this.spherical);
         // this.model.rotateOnWorldAxis(this.dirY,-this.dY)
         // this.model.translateOnAxis(this.dirZ, this.dX)
         // this.spherical.setFromVector3(this.model.position)

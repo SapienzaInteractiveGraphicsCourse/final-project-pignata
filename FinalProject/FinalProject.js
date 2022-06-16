@@ -11,7 +11,7 @@ window.onload = loadScene();
 function loadScene(){
     THREE.Cache.enabled = false;
     const loader = new THREE.ObjectLoader();
-    loader.load(('scenes/scene1.json'), function (scene) {init(scene)});
+    loader.load(('scenes/scene2.json'), function (scene) {init(scene)});
     //loader.load(('scenes/PlanetSystem.json'), function (scene) {init(scene)});
     //loader.load(('scenes/CharacterAnimation.json'), function (scene) {init(scene)});
 
@@ -63,7 +63,7 @@ function init(scene){
         requestAnimationFrame(render);
         camera.updateProjectionMatrix();
         player.update();
-        orbits();
+        // orbits();
         // TWEEN.update();
         renderer.render(scene, camera);
 
@@ -96,8 +96,7 @@ function init(scene){
     }
 
     function orbits(t){
-//      Compute Planet Rotation, Stars Revolution and Universe Rotation. 
-        
+//      Compute Planet Rotation, Stars Revolution and Universe Rotation.  
         scene.getObjectByName("Stars").rotateY(0.005);
         scene.getObjectByName("Universe").rotateX(-0.0005);
         if (player.dY !=0 ) scene.getObjectByName("Planet").rotateOnWorldAxis(dirY, player.dY);

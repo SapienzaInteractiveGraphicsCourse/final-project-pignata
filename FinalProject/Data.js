@@ -7,7 +7,7 @@ export const Data = {
                 joints: ['radius', 'root', 'upTronco', 'rightHip', 'rightKnee', 'rightAnkle', 'leftHip', 'leftKnee', 'leftAnkle', 'rightShoulder', 'rightElbow', 'leftShoulder', 'leftElbow'],
 
                 frames: [
-                    [{radius: 10.56}],
+                    [{y: 10.56}],
                     [{y: 0}],
                     [{y: 0}],
                     [{x: 0}],
@@ -53,7 +53,7 @@ export const Data = {
             'Walk': { // Walking Animation (with Gravity)
                 joints: ['radius', 'rightHip', 'rightKnee', 'rightAnkle', 'leftHip', 'leftKnee', 'leftAnkle', 'rightShoulder', 'rightElbow', 'leftShoulder', 'leftElbow'],
                 frames : [
-                    [ {radius: '+0.15'}, {radius: '+0.15'}, {radius: '-0.15'}, {radius: '-0.15'},       {radius: '+0.15'}, {radius: '+0.15'}, {radius: '-0.15'}, {radius: '-0.15'}],       // Height
+                    [ {y: '+0.15'}, {y: '+0.15'}, {y: '-0.15'}, {y: '-0.15'},       {y: '+0.15'}, {y: '+0.15'}, {y: '-0.15'}, {y: '-0.15'}],       // Height
 
                     [ {x: 15*c}, {x: 0*c}, {x: -30*c}, {x: -60*c},      {x: -35*c}, {x: -30*c}, {x: 5*c}, {x: 15*c} ],      // rightHip
                     [ {x: 30*c}, {x: 90*c}, {x: 120*c}, {x: 90*c},      {x: 0*c}, {x: 45*c}, {x: 5*c}, {x: 0*c} ],          // rightKnee
@@ -79,7 +79,7 @@ export const Data = {
             'Jump': {
                 joints: ['radius', 'Core', 'upTronco', 'rightHip', 'rightKnee', 'rightAnkle', 'leftHip', 'leftKnee', 'leftAnkle', 'rightShoulder', 'rightElbow', 'leftShoulder', 'leftElbow'],
                 frames: [
-                    [{radius: '-0.16'}, {radius: '+0.16'}, {radius: '+1'}, {radius: '-1.16'}],
+                    [{y: '-0.16'}, {y: '+0.16'}, {y: '+1'}, {y: '-1.16'}],
                     [{x: 25*c}, {x: 10*c}, {x: 0}, {x: 25*c}],
                     [{x: -15*c}, {x: 0}, {x: -10*c},{x: -15*c}],
 
@@ -120,7 +120,7 @@ export const Data = {
                 frames: [[{y: '+3.1415'}]],
                 periods: [400],
                 delay: false,
-                reset: true,
+                reset: false,
             }
             // 'TurnBack': {
             //     joints: ['root'],
