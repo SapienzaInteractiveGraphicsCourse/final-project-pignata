@@ -79,27 +79,27 @@ export const Data = {
             'Jump': {
                 joints: ['radius', 'Core', 'upTronco', 'rightHip', 'rightKnee', 'rightAnkle', 'leftHip', 'leftKnee', 'leftAnkle', 'rightShoulder', 'rightElbow', 'leftShoulder', 'leftElbow'],
                 frames: [
-                    [{radius: '-0.16'}, {radius: '+0.16'}, {radius: '+1'}],
-                    [{x: 25*c}, {x: 10*c}, {x: 0}],
-                    [{x: -15*c}, {x: 0}, {x: -10*c}],
+                    [{radius: '-0.16'}, {radius: '+0.16'}, {radius: '+1'}, {radius: '-1.16'}],
+                    [{x: 25*c}, {x: 10*c}, {x: 0}, {x: 25*c}],
+                    [{x: -15*c}, {x: 0}, {x: -10*c},{x: -15*c}],
 
-                    [{x: -55*c}, {x: 15*c}, {x: 0}],
-                    [{x: 80*c}, {x: -15*c}, {x: 90*c}],
-                    [{y: 25*c}, {y: -30*c}, {y: 0}],
+                    [{x: -55*c}, {x: 15*c}, {x: 0},{x: -55*c}],
+                    [{x: 80*c}, {x: -15*c}, {x: 90*c},{x: 80*c}],
+                    [{y: 25*c}, {y: -30*c}, {y: 0},{y: 25*c}],
 
-                    [{x: -55*c}, {x: 15*c}, {x: 0}],
-                    [{x: 80*c}, {x: -15*c}, {x: 90*c}],
-                    [{y: 25*c}, {y: -30*c}, {y: 0}],
+                    [{x: -55*c}, {x: 15*c}, {x: 0},{x: -55*c}],
+                    [{x: 80*c}, {x: -15*c}, {x: 90*c},{x: 80*c}],
+                    [{y: 25*c}, {y: -30*c}, {y: 0},{y: 25*c}],
 
-                    [{x: -30*c}, {x: -90*c}, {x: -150*c}],
-                    [{x: -90*c, y: -30*c}, {x: -60*c, y: 0}, {x: -30*c}],
+                    [{x: -30*c}, {x: -90*c}, {x: -150*c},{x: -30*c}],
+                    [{x: -90*c, y: -30*c}, {x: -60*c, y: 0}, {x: -30*c}, {x: -90*c, y: -30*c}],
 
-                    [{x: -30*c}, {x: -90*c}, {x: -120*c}],
-                    [{x: -90*c, y: -30*c}, {x: -60*c, y: 0}, {x: -45*c}]
+                    [{x: -30*c}, {x: -90*c}, {x: -120*c}, {x: -30*c}],
+                    [{x: -90*c, y: -30*c}, {x: -60*c, y: 0}, {x: -45*c}, {x: -90*c, y: -30*c},]
                 ],
-                periods: [500, 300, 500],
+                periods: [200, 300, 400, 500],
                 repeat: false,
-                delay: [false, 50],
+                delay: [false, 50, false, 50],
                 reset: true,
 
             },

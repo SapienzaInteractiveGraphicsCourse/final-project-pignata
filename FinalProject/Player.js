@@ -108,6 +108,7 @@ export class Player {
     }
 
     update() {
+        this.model.position.setFromSpherical(this.spherical);
         // this.model.rotateOnWorldAxis(this.dirY,-this.dY)
         // this.model.translateOnAxis(this.dirZ, this.dX)
         // this.spherical.setFromVector3(this.model.position)
@@ -116,7 +117,6 @@ export class Player {
         // // console.log(this.frontDir)
         // //  this.spherical.phi -= this.dX;
         // // this.spherical.theta -= this.dY;
-        // this.model.position.setFromSpherical(this.spherical);
         // // this.model.rotation.x = this.spherical.theta - Math.PI
 
         for (const [name, clip] of Object.entries(this.animations)) {
