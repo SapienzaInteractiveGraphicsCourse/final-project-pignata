@@ -45,14 +45,12 @@ function init(scene){
     let dirZ = new THREE.Vector3( 0, 0, 1 );
 
 //  Planet Configuration:
-    let planetParamas = {x: 0, y: 0}
-    // const tweenTurnBack = new TWEEN.Tween(planetParams).to({y: '+3.1415'}, 400).delay(400)
-    const tweenTurnBack = new TWEEN.Tween(scene.getObjectByName("Planet").rotation).to({y: '+3.1415'}, 400).delay(400)
+    // const tweenTurnBack = new TWEEN.Tween(scene.getObjectByName("Planet").rotation).to({y: '+3.1415'}, 400).delay(400)
 
 //  Set the box for orientation:  
     const box = scene.getObjectByName("Box");
-    box.scale.set(0.05,0.05,0.05);
-    box.position.setFromSpherical(new THREE.Spherical(1.02, -0.2, 0));
+    // box.scale.set(0.05,0.05,0.05);
+    // box.position.setFromSpherical(new THREE.Spherical(1.02, -0.2, 0));
     box.lookAt(0,0,0);
 
 //  Function calls:

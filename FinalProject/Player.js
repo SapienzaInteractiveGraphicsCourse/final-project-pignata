@@ -95,7 +95,8 @@ export class Player {
                 case "KeyD":
                     this.dY = 0;
                     this.animations.TurnRight.stop();
-                    this.reset()
+                    this.animations.Reset.start();
+                    // this.reset()
                 break;
                 case "KeyS":
                     // this.dX = 0;

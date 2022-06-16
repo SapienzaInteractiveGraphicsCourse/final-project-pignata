@@ -22,7 +22,7 @@ export const Data = {
                     [{x: 0, y: 0}]
                  ],
 
-                periods: [400],
+                periods: [250],
                 repeat: false,
                 delay: false,
             },
@@ -105,13 +105,13 @@ export const Data = {
             },
             'TurnRight': {
                 joints: ['root','leftAnkle','rightAnkle', 'upTronco'],
-                frames: [[{y: '-0.2'}],[{x: '-0.5'}],[{x: '-0.5'}],[{y: '-0.25'}]],
+                frames: [[{y: '-0.0'}],[{x: '-0.5'}],[{x: '-0.5'}],[{y: '-0.25'}]],
                 periods: [200],
                 reset: false,
             },
             'TurnLeft': {
                 joints: ['root','leftAnkle','rightAnkle', 'upTronco'],
-                frames: [[{y: '+0.2'}],[{x: '+0.5'}],[{x: '+0.5'}],[{y: '+0.25'}]],
+                frames: [[{y: '+0.0'}],[{x: '+0.5'}],[{x: '+0.5'}],[{y: '+0.25'}]],
                 periods: [200],
                 reset: false,
             },
@@ -124,9 +124,9 @@ export const Data = {
             }
             // 'TurnBack': {
             //     joints: ['root'],
-            //     frames: [[{y: +180*c}, {y: +180*c}]],
-            //     periods: [300, 200],
-            //     reset: false,
+            //     frames: [[{y: "3.1415"}]],
+            //     periods: [600],
+            //     reset: true,
             // }
         }
     }
