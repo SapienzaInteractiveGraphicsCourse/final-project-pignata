@@ -19,6 +19,15 @@ function loadScene(){
 
 function init(scene){
 //  Set the canvas: 
+    const c1 = document.getElementById('info-canvas');
+    c1.width  = window.innerWidth * 0.8;
+    c1.height = window.innerHeight * 0.8;
+    c1.style = "position: absolute; top: 0px; left: 0px; right: 0px; bottom: 0px; margin: auto; border:2px solid white";
+
+    const ctx = c1.getContext('2d');
+    ctx.font = "30px Arial";
+    ctx.fillText("Hello World", 10, 50);
+
     const canvas = document.getElementById("gl-canvas");
     canvas.width  = window.innerWidth * 0.8;
     canvas.height = window.innerHeight * 0.8;
@@ -35,11 +44,13 @@ function init(scene){
     const camera = scene.getObjectByName("PlayerCam");
     window.addEventListener('resize', resize);
 
+//  Scene Configuration: 
+    // let vStars =  0.005;
+    // let vPlanet = 0.0005;
+    // let vUniverse = -0.0005;
+
 //  Set the Astronaut as Player:
     const astronaut = scene.getObjectByName("Astronaut");
-    let names = []
-    getChildrenNames(astronaut)
-    console.log(names)
     const player = new Player(astronaut);
 
 //  Function calls:
@@ -87,24 +98,23 @@ function init(scene){
 //      Compute Planet Rotation, Stars Revolution and Universe Rotation.  
         scene.getObjectByName("Stars").rotateY(0.005);
         scene.getObjectByName("Universe").rotateX(-0.0005);
-        // if (player.dY !=0 ) scene.getObjectByName("Planet").rotateOnWorldAxis(dirY, player.dY);
-        // if (player.dX != 0) scene.getObjectByName("Planet").rotateOnWorldAxis(dirX,player.dX);
+        scene.getObjectByName("Planet Zigarov").rotateZ(0.0005);
     }
 
     function setArrowHelpers(){
 //      Set the Arrow Helpers for directions...
-        const origin = new THREE.Vector3(1, 11, 0);
+        const origin = new THREE.Vector3(-1.5, -0.5, 0);
         const length = 0.5;
         const hex = 0xffffff;
         const dirX = new THREE.Vector3( 1, 0, 0 );
         const dirY = new THREE.Vector3( 0, 1, 0 );
         const dirZ = new THREE.Vector3( 0, 0, 1 );
             const arrowHelpers = [
-            new THREE.ArrowHelper( dirX, origin, length, hex ),
-            new THREE.ArrowHelper( dirY, origin, length, hex ),
-            new THREE.ArrowHelper( dirZ, origin, length, hex )
+            new THREE.ArrowHelper( dirX, origin, length, 0xFF0000),
+            new THREE.ArrowHelper( dirY, origin, length, 0x00FF00),
+            new THREE.ArrowHelper( dirZ, origin, length, 0x0000FF)
         ];
-        arrowHelpers.forEach((arrow) => {scene.add(arrow);});
+        arrowHelpers.forEach((arrow) => {astronaut.getObjectByName('root').add(arrow);});
     }
 
     function guiOptions(){
@@ -142,6 +152,11 @@ function init(scene){
                 targetFolder.add(lightTarget.position, 'z', 0,10);
             }
         });
+
+//      Planet System Controls:
+        const planetSystemFolder = gui.addFolder('PlanetSystem');
+        planetSystemFolder.add(player, 'gravity').onChange((value) => {console.log('gravity: ',value);});   
+        planetSystemFolder.open()
     }
 
     function resize() {

@@ -11,7 +11,7 @@ export class Player {
     dirZ = new THREE.Vector3( 0, 0, 1);
     dX = 0.0;                                       // Increment of X Angle Rotation        
     dY = 0.0;                                       // Increment of Y Angle Rotation
-    gravity = true;                 
+    gravity = false;                 
 
     constructor(obj){
         this.model = obj;
@@ -41,7 +41,7 @@ export class Player {
             switch(e.code){
                 case "KeyW":
                     this.dX = +0.005;
-                    clipName = (this.gravity) ? 'Walk': 'Run'
+                    clipName = (!this.gravity) ? 'Walk': 'Run'
                     this.animations[clipName].repeat = true;
                     this.animations[clipName].start();
                 break;
@@ -63,8 +63,7 @@ export class Player {
                 break;
                 case "KeyJ":
                     // if (this.animations.Walk.playing) this.animations.Walk.stop()
-                    clipName = (this.gravity) ? 'Jump' : 'nJump'
-                    console.log(clipName)
+                    clipName = (!this.gravity) ? 'Jump' : 'nJump'
                     this.animations[clipName].start()
                 break;
                 case "KeyR":
@@ -81,8 +80,7 @@ export class Player {
             let clipName
             switch(e.code){
                 case "KeyW":
-                    clipName = (this.gravity) ? 'Walk':'Run'
-                    console.log('clipName ', clipName)
+                    clipName = (!this.gravity) ? 'Walk':'Run'
                     this.animations[clipName].repeat = false;
                     this.animations[clipName].stop();
                     // this.reset();
