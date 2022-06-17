@@ -30,6 +30,7 @@ function init(scene){
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.BasicShadowMap; //THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
 
+
 //  Set the Camera:
     const camera = scene.getObjectByName("PlayerCam");
     window.addEventListener('resize', resize);
@@ -40,18 +41,6 @@ function init(scene){
     getChildrenNames(astronaut)
     console.log(names)
     const player = new Player(astronaut);
-    let dirX = new THREE.Vector3( 1, 0, 0 );
-    let dirY = new THREE.Vector3( 0, 1, 0 );
-    let dirZ = new THREE.Vector3( 0, 0, 1 );
-
-//  Planet Configuration:
-    // const tweenTurnBack = new TWEEN.Tween(scene.getObjectByName("Planet").rotation).to({y: '+3.1415'}, 400).delay(400)
-
-//  Set the box for orientation:  
-    const box = scene.getObjectByName("Box");
-    // box.scale.set(0.05,0.05,0.05);
-    // box.position.setFromSpherical(new THREE.Spherical(1.02, -0.2, 0));
-    box.lookAt(0,0,0);
 
 //  Function calls:
     configureInputs();
@@ -63,8 +52,7 @@ function init(scene){
         requestAnimationFrame(render);
         camera.updateProjectionMatrix();
         player.update();
-        // orbits();
-        // TWEEN.update();
+        orbits();
         renderer.render(scene, camera);
 
     }
@@ -84,7 +72,7 @@ function init(scene){
             switch(e.code){
                 case('KeyS'):
                     // tweenTurnBack.start()
-                    dirX = dirX.negate()
+                    // dirX = dirX.negate()
             }
         })
         window.addEventListener('keyUp', (e) => {
@@ -99,8 +87,8 @@ function init(scene){
 //      Compute Planet Rotation, Stars Revolution and Universe Rotation.  
         scene.getObjectByName("Stars").rotateY(0.005);
         scene.getObjectByName("Universe").rotateX(-0.0005);
-        if (player.dY !=0 ) scene.getObjectByName("Planet").rotateOnWorldAxis(dirY, player.dY);
-        if (player.dX != 0) scene.getObjectByName("Planet").rotateOnWorldAxis(dirX,player.dX);
+        // if (player.dY !=0 ) scene.getObjectByName("Planet").rotateOnWorldAxis(dirY, player.dY);
+        // if (player.dX != 0) scene.getObjectByName("Planet").rotateOnWorldAxis(dirX,player.dX);
     }
 
     function setArrowHelpers(){

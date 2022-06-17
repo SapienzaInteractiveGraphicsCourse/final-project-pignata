@@ -5,25 +5,18 @@ export class Player {
     animations = {};
 
 //  Position Parameters:
-    spherical = new THREE.Spherical(    // Player Position. 
-        10.56,                          // radius - the radius, or the Euclidean distance from the point to the origin.
-        0,                              // phi - polar angle in radians from the y (up) axis.
-        0                               // theta - equator angle in radians around the y (up) axis.
-    );     
+
     dirX = new THREE.Vector3( 1, 0, 0 );
     dirY = new THREE.Vector3( 0, 1, 0 );
     dirZ = new THREE.Vector3( 0, 0, 1);
     dX = 0.0;                                       // Increment of X Angle Rotation        
     dY = 0.0;                                       // Increment of Y Angle Rotation
-    turnBack = false;                 
+    gravity = true;                 
 
     constructor(obj){
         this.model = obj;
         this.name = obj.name;
-        console.log("Player Name : ", this.name)
-        this.cam = obj.getObjectByName("PlayerCam")
-        this.frontDir = new THREE.Vector3(0,0,1)
-        this.dir = new THREE.Vector3(0,0,1)
+        console.log("Player: ", this.name)
 
     //  Set the lightTarget of the astronaut.    
         const lightTarget = new THREE.Object3D();
@@ -44,11 +37,13 @@ export class Player {
 
 //      Input Configuration:
         window.addEventListener('keydown', (e) => {
+            let clipName;
             switch(e.code){
                 case "KeyW":
                     this.dX = +0.005;
-                    this.animations.Walk.repeat = true;
-                    this.animations.Walk.start();
+                    clipName = (this.gravity) ? 'Walk': 'Run'
+                    this.animations[clipName].repeat = true;
+                    this.animations[clipName].start();
                 break;
                 case "KeyA":
                     if (this.dY <= 0.0){
@@ -62,28 +57,34 @@ export class Player {
                         this.animations.TurnRight.start();
                     }
                 break;
-                break;
                 case "KeyS":
-                    // this.dX = -0.0025;
-                    // this.animations.Walk.start();
                     this.animations.TurnBack.start();
                     this.dirX = this.dirX.applyAxisAngle(this.dirY, 3.1415)
-                    // this.dirY.negate();
                 break;
                 case "KeyJ":
-                    this.animations.Jump.start();
+                    // if (this.animations.Walk.playing) this.animations.Walk.stop()
+                    clipName = (this.gravity) ? 'Jump' : 'nJump'
+                    console.log(clipName)
+                    this.animations[clipName].start()
                 break;
                 case "KeyR":
                     this.animations.Reset.playng = false;
                     this.animations.Reset.start();
                 break;
+                case 'KeyG':
+                    this.gravity = !this.gravity;
+                    console.log('Gravity: ', this.gravity)
+                break;
             }
         });
         window.addEventListener('keyup', (e) => {
+            let clipName
             switch(e.code){
                 case "KeyW":
-                    this.animations.Walk.repeat = false;
-                    this.animations.Walk.stop();
+                    clipName = (this.gravity) ? 'Walk':'Run'
+                    console.log('clipName ', clipName)
+                    this.animations[clipName].repeat = false;
+                    this.animations[clipName].stop();
                     // this.reset();
                     this.animations.Reset.start();
                     this.dX = 0;
@@ -110,7 +111,7 @@ export class Player {
     }
 
     update() {
-//      Compute Momevent:
+//      Compute Momevent Update:
         if(this.dY!=0){
             this.model.rotateOnWorldAxis(this.dirY, this.dY)
             this.dirX = this.dirX.applyAxisAngle(this.dirY, this.dY)
@@ -119,17 +120,8 @@ export class Player {
             this.model.rotateOnWorldAxis(this.dirX, this.dX) 
             this.dirY = this.dirY.applyAxisAngle(this.dirX, this.dX)
         }
-        // this.model.position.setFromSpherical(this.spherical);
-        // this.model.rotateOnWorldAxis(this.dirY,-this.dY)
-        // this.model.translateOnAxis(this.dirZ, this.dX)
-        // this.spherical.setFromVector3(this.model.position)
-        // this.spherical.radius = 10.56
-        // // console.log(this.dir)
-        // // console.log(this.frontDir)
-        // //  this.spherical.phi -= this.dX;
-        // // this.spherical.theta -= this.dY;
-        // // this.model.rotation.x = this.spherical.theta - Math.PI
 
+//      Compute Animation Update:
         for (const [name, clip] of Object.entries(this.animations)) {
             if (clip.completed){
                 console.log(clip.name)
