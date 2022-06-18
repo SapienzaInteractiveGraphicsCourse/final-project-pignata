@@ -27,6 +27,7 @@ export const Data = {
                 periods: [500],
                 repeat: false,
                 delay: false,
+                reset: false,
             },
             'Walk': { // Walking Animation (with Gravity)
                 joints: ['radius', 'Core', 'rightHip', 'rightKnee', 'rightAnkle', 'leftHip', 'leftKnee', 'leftAnkle', 'rightShoulder', 'rightElbow', 'leftShoulder', 'leftElbow'],
@@ -180,14 +181,21 @@ export const Data = {
                 delay: false,
                 reset: false,
             }
-            // 'TurnBack': {
-            //     joints: ['root'],
-            //     frames: [[{y: "3.1415"}]],
-            //     periods: [600],
-            //     reset: true,
-            // }
+        }
+    },
+    'SpaceShip': {
+        animations: {
+            'Boarding': {
+                joints: ['leg1', 'leg2', 'leg3','leg4'],
+                frames: [[{x:  0.3, y: 0.8, z:  0.3}],[{x: -0.3, y: 0.8, z: -0.3}],[{x:  0.3, y: 0.8, z: -0.3}], [{x: -0.3, y: 0.8, z:  0.3}]],
+                periods: [300],
+                repeat: false,
+                delay: false,
+                reset: false,
+            },
         }
     }
+
 }
 /*
     MODIFIED Structure:

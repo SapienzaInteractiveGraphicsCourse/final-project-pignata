@@ -4,6 +4,8 @@ import {GLTFLoader} from '../resources/three/examples/jsm/loaders/GLTFLoader.js'
 import {GUI} from "../resources/three/examples/jsm/libs/dat.gui.module.js"
 import {TWEEN} from "../resources/three/examples/jsm/libs/tween.module.min.js"
 import {Player} from "./Player.js"
+import { Astronaut } from './Astronaut.js';
+import { SpaceShip } from './SpaceShip.js';
 
 window.onload = loadScene();
 
@@ -44,7 +46,7 @@ function init(scene){
     getChildrenNames(scene);
 
 //  Set the Camera:
-    const camera = scene.getObjectByName("PlayerCam");
+    let camera = scene.getObjectByName("PlayerCam");
     window.addEventListener('resize', resize);
 
 //  Scene Configuration: 
@@ -56,11 +58,11 @@ function init(scene){
 
 //  Set the Astronaut as Player:
     const astronaut = scene.getObjectByName("Astronaut");
-    const player = new Player(astronaut);
+    const player = new Astronaut(astronaut);
 
 //  SpaceShip:
-    const ship = scene.getObjectByName("SpaceShip");
-    ship.getObjectByName("SpotLight").target = ship.getObjectByName('lightTarget');
+    // const ship = scene.getObjectByName("SpaceShip");
+    const ship = new SpaceShip(scene.getObjectByName("SpaceShip"))
     // const spherical = new
     // ship.position.setF
 
@@ -74,6 +76,7 @@ function init(scene){
         requestAnimationFrame(render);
         camera.updateProjectionMatrix();
         player.update();
+        ship.update()
         orbits();
         renderer.render(scene, camera);
 
@@ -95,8 +98,16 @@ function init(scene){
                 case('KeyS'):
                     // tweenTurnBack.start()
                     // dirX = dirX.negate()
+                break;
+                case('KeyC'):
+                    camera = ship.model.getObjectByName('shipCam')
+                break;
+                case 'Space':
+					player.callSpaceShip(ship)
+                break;
             }
         })
+        
         window.addEventListener('keyUp', (e) => {
             switch(e.code){
                 
