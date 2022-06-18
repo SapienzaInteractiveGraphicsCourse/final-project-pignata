@@ -120,7 +120,7 @@ function init(scene){
 //      Compute Planet Rotation, Stars Revolution and Universe Rotation.  
         scene.getObjectByName("Stars").rotateY(0.005);
         scene.getObjectByName("Universe").rotateX(-0.0005);
-        scene.getObjectByName("Planet Zigarov").rotateZ(0.0005);
+        // scene.getObjectByName("Planet Zigarov").rotateZ(0.0005);
     }
 
     function setArrowHelpers(){
