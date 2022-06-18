@@ -147,6 +147,22 @@ export class Player {
         //this.animations.Reset.playing = false;
     }
 
+    alignToZenith() {
+/* Function to Align the model respect the tangent to the planet surface. */ 
+        let up = new THREE.Vector3()								// up = up direction in world space.
+        this.model.getWorldPosition(up)
+        up.normalize() 
+        // const y = new THREE.Vector3(0,1,0);						// y = up direction in the object space
+        const angle = this.y.angleTo(up)   							// Returns the angle between this vector and vector v in radians.
+        
+        if (angle > 0.01) {
+            console.log(up)
+            const w = new THREE.Vector3().crossVectors(this.y, up)	// w = ortogonal vector between 
+            console.log(angle)
+            this.model.rotateOnAxis(w, angle)						// Rotate an object along an axis in object space. The axis is assumed to be normalized.
+            this.y = up;
+        }
+    }
 }
 
 export class Animation{
