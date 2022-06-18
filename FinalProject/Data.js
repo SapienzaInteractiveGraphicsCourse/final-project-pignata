@@ -163,13 +163,13 @@ export const Data = {
             },
             'TurnRight': {
                 joints: ['root','leftAnkle','rightAnkle', 'upTronco'],
-                frames: [[{y: '-0.0'}],[{x: '-0.5'}],[{x: '-0.5'}],[{y: '-0.25'}]],
+                frames: [[{y: '-0.0'}],[{x: '-0.6'}],[{x: '-0.6'}],[{y: '-0.4'}]],
                 periods: [200],
                 reset: false,
             },
             'TurnLeft': {
                 joints: ['root','leftAnkle','rightAnkle', 'upTronco'],
-                frames: [[{y: '+0.0'}],[{x: '+0.5'}],[{x: '+0.5'}],[{y: '+0.25'}]],
+                frames: [[{y: '+0.0'}],[{x: '+0.6'}],[{x: '+0.6'}],[{y: '+0.4'}]],
                 periods: [200],
                 reset: false,
             },

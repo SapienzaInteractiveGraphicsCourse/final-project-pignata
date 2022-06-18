@@ -11,7 +11,7 @@ window.onload = loadScene();
 function loadScene(){
     THREE.Cache.enabled = false;
     const loader = new THREE.ObjectLoader();
-    loader.load(('scenes/scene2.json'), function (scene) {init(scene)});
+    loader.load(('scenes/scene3.json'), function (scene) {init(scene)});
     //loader.load(('scenes/PlanetSystem.json'), function (scene) {init(scene)});
     //loader.load(('scenes/CharacterAnimation.json'), function (scene) {init(scene)});
 
@@ -39,6 +39,9 @@ function init(scene){
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.BasicShadowMap; //THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
 
+//  Get all nodes names:
+    let nodes = [];
+    getChildrenNames(scene);
 
 //  Set the Camera:
     const camera = scene.getObjectByName("PlayerCam");
@@ -49,9 +52,16 @@ function init(scene){
     // let vPlanet = 0.0005;
     // let vUniverse = -0.0005;
 
+//  Lights:
+
 //  Set the Astronaut as Player:
     const astronaut = scene.getObjectByName("Astronaut");
     const player = new Player(astronaut);
+
+//  SpaceShip:
+    const ship = scene.getObjectByName("SpaceShip");
+    // const spherical = new
+    // ship.position.setF
 
 //  Function calls:
     configureInputs();
@@ -69,7 +79,7 @@ function init(scene){
     }
 
     function getChildrenNames(obj) {
-        names.push(obj.name)
+        nodes.push(obj.name)
         if (Array.isArray(obj.children) && obj.children.length){
             for(let child of obj.children){
                 getChildrenNames(child)
@@ -130,11 +140,15 @@ function init(scene){
 
 //      Lights Controls: 
         const lightsFolder = gui.addFolder("Lights");
-        const lights = [
-            scene.getObjectByName("star1Light"),
-            scene.getObjectByName("star2Light"),
-            scene.getObjectByName("lightEye")
+        let lights = [
+            // scene.getObjectByName("star1Light"),
+            // scene.getObjectByName("star2Light"),
+            // scene.getObjectByName("lightEye"),
+            // scene.getObjectByName("shipLight")
         ];  
+        nodes.forEach(node => {
+            if (node.includes("Light")) lights.push(scene.getObjectByName(node))
+        })
         lights.forEach(light => {
             const lightFolder = lightsFolder.addFolder(light.name);
             lightFolder.addColor(new ColorGUIHelper(light, 'color'), 'value').name('color');
