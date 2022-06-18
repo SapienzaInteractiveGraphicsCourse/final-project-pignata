@@ -60,6 +60,7 @@ function init(scene){
 
 //  SpaceShip:
     const ship = scene.getObjectByName("SpaceShip");
+    ship.getObjectByName("SpotLight").target = ship.getObjectByName('lightTarget');
     // const spherical = new
     // ship.position.setF
 
@@ -143,7 +144,7 @@ function init(scene){
         let lights = [
             // scene.getObjectByName("star1Light"),
             // scene.getObjectByName("star2Light"),
-            // scene.getObjectByName("lightEye"),
+            scene.getObjectByName("lightEye")
             // scene.getObjectByName("shipLight")
         ];  
         nodes.forEach(node => {
@@ -155,15 +156,15 @@ function init(scene){
             lightFolder.add(light, 'intensity', 0, 1000);
             lightFolder.add(light, 'distance', 0, 1000);
             lightFolder.add(light, 'decay', 0, 2);
-            if (light.name == 'lightEye') {
+            if (light.type == 'SpotLight') {
                 lightFolder.add(light, 'angle', 0, 1.57);
                 lightFolder.add(light, 'penumbra', 0, 1);
 
                 const targetFolder = lightFolder.addFolder("Target");
-                const lightTarget = astronaut.getObjectByName("lightTarget");
-                targetFolder.add(lightTarget.position, 'x', 0,10);
-                targetFolder.add(lightTarget.position, 'y', 0,10);
-                targetFolder.add(lightTarget.position, 'z', 0,10);
+                const lightTarget = light.getObjectByName("lightTarget");
+                targetFolder.add(lightTarget.position, 'x', -5,5);
+                targetFolder.add(lightTarget.position, 'y', -5,5);
+                targetFolder.add(lightTarget.position, 'z', -5,5);
             }
         });
 

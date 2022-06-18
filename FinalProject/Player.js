@@ -21,8 +21,8 @@ export class Player {
     //  Set the lightTarget of the astronaut.    
         const lightTarget = new THREE.Object3D();
         lightTarget.name = 'lightTarget'
-        this.model.getObjectByName("Head").add(lightTarget);
-        lightTarget.position.set(0,0.2,1);
+        this.model.getObjectByName("lightEye").add(lightTarget);
+        lightTarget.position.set(0,-1,1);
         this.model.getObjectByName("lightEye").target = lightTarget;
 
 //      COMPUTE ANIMATIONS:
