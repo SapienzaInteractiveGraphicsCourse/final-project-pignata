@@ -238,7 +238,13 @@ export const Data = {
             'Boarding': {
                 joints: ['leg1', 'leg2', 'leg3','leg4', 'frontPanel'],
                 attributes: ['position', 'position', 'position', 'position', 'rotation'],
-                frames: [[{x:  0.3, y: 0.8, z:  0.3}],[{x: -0.3, y: 0.8, z: -0.3}],[{x:  0.3, y: 0.8, z: -0.3}], [{x: -0.3, y: 0.8, z:  0.3}, {y: 180*c}]],
+                frames: [
+                    [{x:  0.3, y: 0.8, z:  0.3}],
+                    [{x: -0.3, y: 0.8, z: -0.3}],
+                    [{x:  0.3, y: 0.8, z: -0.3}], 
+                    [{x: -0.3, y: 0.8, z:  0.3}], 
+                    [{y: 180*c}]
+                ],
                 periods: [300],
                 delay: false,
                 repeat: false,
@@ -246,14 +252,14 @@ export const Data = {
             },
 
             'MoveTo': {
-                joints: ['SpaceShip', 'SpaceShip'],
-                attributes: ['position', 'rotation'], 
+                joints: ['SpaceShip', 'root'],
+                attributes: ['rotation', 'position'], 
                 frames: [
-                    [{x: 0, y: 10.45, z: 0}], 
-                    [{x: 0, y: 0, z: 0}]
+                    [{x: '+0', y: '+0', z: '+0'}], 
+                    [{y: '+2'}]
                 ],
-                periods: [1000],
-                dealy: [300],
+                periods: [200],
+                delay: [300],
                 repeat: false,
                 reset: false,
             },

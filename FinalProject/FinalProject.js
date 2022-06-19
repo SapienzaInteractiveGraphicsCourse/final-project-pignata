@@ -13,7 +13,7 @@ window.onload = loadScene();
 function loadScene(){
     THREE.Cache.enabled = false;
     const loader = new THREE.ObjectLoader();
-    loader.load(('scenes/scene3.json'), function (scene) {init(scene)});
+    loader.load(('scenes/scene4.json'), function (scene) {init(scene)});
     //loader.load(('scenes/PlanetSystem.json'), function (scene) {init(scene)});
     //loader.load(('scenes/CharacterAnimation.json'), function (scene) {init(scene)});
 
@@ -21,14 +21,14 @@ function loadScene(){
 
 function init(scene){
 //  Set the canvas: 
-    const c1 = document.getElementById('info-canvas');
-    c1.width  = window.innerWidth * 0.8;
-    c1.height = window.innerHeight * 0.8;
-    c1.style = "position: absolute; top: 0px; left: 0px; right: 0px; bottom: 0px; margin: auto; border:2px solid white";
+    // const c1 = document.getElementById('info-canvas');
+    // c1.width  = window.innerWidth * 0.8;
+    // c1.height = window.innerHeight * 0.8;
+    // c1.style = "position: absolute; top: 0px; left: 0px; right: 0px; bottom: 0px; margin: auto; border:2px solid white";
 
-    const ctx = c1.getContext('2d');
-    ctx.font = "30px Arial";
-    ctx.fillText("Hello World", 10, 50);
+    // const ctx = c1.getContext('2d');
+    // ctx.font = "30px Arial";
+    // ctx.fillText("Hello World", 10, 50);
 
     const canvas = document.getElementById("gl-canvas");
     canvas.width  = window.innerWidth * 0.8;
@@ -98,7 +98,7 @@ function init(scene){
                 break;
                 case 'KeyP':
 					player.boarding(ship)
-					break;
+				break;
             }
         })
         

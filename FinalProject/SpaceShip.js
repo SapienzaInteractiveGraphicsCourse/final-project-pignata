@@ -142,7 +142,7 @@ export class SpaceShip extends Player {
 			{x: position.x, y: position.y +1, z: position.z}
 		]
 		this.animations.MoveTo.frames[1] = [
-			{x: rotation.x, y: rotation.y, z: rotation.z}
+			{x: rotation.x, y: rotation.y +1, z: rotation.z}
 		]
 
 		this.animations.MoveTo.start()

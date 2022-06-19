@@ -111,22 +111,41 @@ export class Astronaut extends Player {
 
 	}
 
-	callSpaceShip(spaceShip){
-		console.log('Calling The SpaceShip...')
-		let spherical = new THREE.Spherical()
-		let position = new THREE.Vector3()
-		this.model.getObjectByName('root').getWorldPosition(position)
-		console.log("Astronaut Coords: \n",position)
-		spherical.setFromVector3(position);
-		// console.log(spherical)
-		// console.log(spherical);
-		spherical.radius += 1;
-		// spherical.radius -= 0.1;
+	// callSpaceShip(spaceShip){
+	// 	console.log('Calling The SpaceShip...')
+	// 	let spherical = new THREE.Spherical()
+	// 	let position = new THREE.Vector3()
+	// 	this.model.getObjectByName('root').getWorldPosition(position)
+	// 	console.log("Astronaut Coords: \n",position)
+	// 	spherical.setFromVector3(position);
+	// 	// console.log(spherical)
+	// 	// console.log(spherical);
+	// 	spherical.radius += 1;
+	// 	// spherical.radius -= 0.1;
 
-		let shipEndPosition = new THREE.Vector3();
-		shipEndPosition.setFromSpherical(spherical)
-		// console.log('Spaceship Required Position for Boarding:\n', shipEndPosition)
-		spaceShip.moveTo(shipEndPosition, this.model.rotation)
+	// 	let shipEndPosition = new THREE.Vector3();
+	// 	shipEndPosition.setFromSpherical(spherical)
+	// 	// console.log('Spaceship Required Position for Boarding:\n', shipEndPosition)
+	// 	spaceShip.moveTo(shipEndPosition, this.model.rotation)
+	// }
+
+	callSpaceShip(ship) {
+		console.log('Calling the SpaceShip...')
+		const rotationFrame = {
+			x: this.model.rotation.x,
+			y: this.model.rotation.y,
+			z: this.model.rotation.z,
+		}
+		const heightFrame = {
+			y: '+0'
+		}
+		console.log(ship.animations.MoveTo.frames)
+		ship.animations.MoveTo.frames[0].push(rotationFrame)
+		ship.animations.MoveTo.frames[1].push(heightFrame)
+		ship.animations.MoveTo.periods.push(500)
+		ship.animations.MoveTo.delay.push(false)
+		ship.animations.Boarding.start()
+		ship.animations.MoveTo.start()
 	}
 
 	boarding(ship) {
