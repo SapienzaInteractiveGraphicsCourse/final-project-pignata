@@ -24,10 +24,12 @@ export class Astronaut extends Player {
             let clipName;
             switch(e.code){
                 case "KeyW":
-                    this.dX = +0.005;
                     clipName = (!this.gravity) ? 'Walk': 'Run'
-                    this.animations[clipName].repeat = true;
-                    this.animations[clipName].start();
+					if (!this.animations[clipName].playing){
+						this.dX = +0.005;
+						this.animations[clipName].repeat = true;
+						this.animations[clipName].start();
+					}
                 break;
                 case "KeyA":
                     if (this.dY <= 0.0){
@@ -65,7 +67,7 @@ export class Astronaut extends Player {
             switch(e.code){
                 case "KeyW":
                     clipName = (!this.gravity) ? 'Walk':'Run'
-                    this.animations[clipName].repeat = false;
+                    // this.animations[clipName].repeat = false;
                     this.animations[clipName].stop();
                     // this.reset();
                     this.animations.Reset.start();
@@ -111,15 +113,17 @@ export class Astronaut extends Player {
 		let spherical = new THREE.Spherical()
 		let position = new THREE.Vector3()
 		this.model.getObjectByName('root').getWorldPosition(position)
-		console.log(position)
+		// console.log("Astronaut Coords: \n",position)
 		spherical.setFromVector3(position);
+		// console.log(spherical)
 		// console.log(spherical);
-		spherical.radius += 2;
+		// spherical.radius += 2;
+		spherical.radius -= 0.1;
 
 		let shipEndPosition = new THREE.Vector3();
 		shipEndPosition.setFromSpherical(spherical)
-		console.log('ship end position :', shipEndPosition)
-		spaceShip.moveTo(shipEndPosition)
+		// console.log('Spaceship Required Position for Boarding:\n', shipEndPosition)
+		spaceShip.moveTo(shipEndPosition, this.model.rotation)
 	}
 
 	get moving(){

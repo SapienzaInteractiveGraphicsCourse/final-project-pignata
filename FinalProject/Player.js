@@ -3,126 +3,23 @@ import {Data} from "./Data.js"
 
 export class Player {
     animations = {};
-
 // //  Position Parameters:
-//     dirX = new THREE.Vector3( 1, 0, 0 );
-//     dirY = new THREE.Vector3( 0, 1, 0 );
-//     dirZ = new THREE.Vector3( 0, 0, 1);
-//     dX = 0.0;                                       // Increment of X Angle Rotation        
-//     dY = 0.0;                                       // Increment of Y Angle Rotation
-//     gravity = false;                 
-
     constructor(obj){
         this.model = obj;
         this.name = obj.name;
         console.log("New Player: ", this.name)
 
-    //  Set the lightTarget of the astronaut.    
-        // const lightTarget = new THREE.Object3D();
-        // lightTarget.name = 'lightTarget'
-        // this.model.getObjectByName("lightEye").add(lightTarget);
-        // lightTarget.position.set(0,-1,1);
-        // this.model.getObjectByName("lightEye").target = lightTarget;
-
 //      COMPUTE ANIMATIONS:
-
         for (const [name, clip] of Object.entries(Data[this.name].animations)) {
             let joints = [];
             clip.joints.forEach((joint, i) => {
-                // console.log(joint)
-                if (joint=='radius' ) joints.push(this.model.getObjectByName('root').position)
-                else if (joint.includes('leg')) {
-                    joints.push(obj.getObjectByName(joint).position)
-                }
-                else joints.push(obj.getObjectByName(joint).rotation)
+                joints.push(obj.getObjectByName(joint)[clip.attributes[i]])
             });
-            this.animations[name] = new Animation(name, joints, clip.frames, clip.periods, clip.repeat, clip.delay, clip.reset);
+            this.animations[name] = new Animation(name, joints, clip.frames, clip.periods, clip.delay, clip.repeat, clip.reset);
         }
-
-// //      Input Configuration:
-//         window.addEventListener('keydown', (e) => {
-//             let clipName;
-//             switch(e.code){
-//                 case "KeyW":
-//                     this.dX = +0.005;
-//                     clipName = (!this.gravity) ? 'Walk': 'Run'
-//                     this.animations[clipName].repeat = true;
-//                     this.animations[clipName].start();
-//                 break;
-//                 case "KeyA":
-//                     if (this.dY <= 0.0){
-//                         this.dY = 0.03;
-//                         this.animations.TurnLeft.start();
-//                     }
-//                 break;
-//                 case "KeyD":
-//                     if (this.dY >= 0.0){
-//                         this.dY = -0.03;
-//                         this.animations.TurnRight.start();
-//                     }
-//                 break;
-//                 case "KeyS":
-//                     this.animations.TurnBack.start();
-//                     this.dirX = this.dirX.applyAxisAngle(this.dirY, 3.1415)
-//                 break;
-//                 case "KeyJ":
-//                     // if (this.animations.Walk.playing) this.animations.Walk.stop()
-//                     clipName = (!this.gravity) ? 'Jump' : 'nJump'
-//                     this.animations[clipName].start()
-//                 break;
-//                 case "KeyR":
-//                     this.animations.Reset.playng = false;
-//                     this.animations.Reset.start();
-//                 break;
-//                 case 'KeyG':
-//                     this.gravity = !this.gravity;
-//                     console.log('Gravity: ', this.gravity)
-//                 break;
-//             }
-//         });
-//         window.addEventListener('keyup', (e) => {
-//             let clipName
-//             switch(e.code){
-//                 case "KeyW":
-//                     clipName = (!this.gravity) ? 'Walk':'Run'
-//                     this.animations[clipName].repeat = false;
-//                     this.animations[clipName].stop();
-//                     // this.reset();
-//                     this.animations.Reset.start();
-//                     this.dX = 0;
-//                 break;
-//                 case "KeyA":
-//                     this.dY = 0;
-//                     this.animations.TurnLeft.stop();
-//                     this.animations.Reset.start();
-
-//                 break;
-//                 case "KeyD":
-//                     this.dY = 0;
-//                     this.animations.TurnRight.stop();
-//                     this.animations.Reset.start();
-//                     // this.reset()
-//                 break;
-//                 case "KeyS":
-//                     // this.dX = 0;
-//                     // this.animations.Walk.stop();
-//                     // this.animations.Reset.start()
-//                 break;
-//             }
-//         });
     }
 
     update() {
-// //      Compute Momevent Update:
-//         if(this.dY!=0){
-//             this.model.rotateOnWorldAxis(this.dirY, this.dY)
-//             this.dirX = this.dirX.applyAxisAngle(this.dirY, this.dY)
-//         }
-//         if(this.dX!=0){
-//             this.model.rotateOnWorldAxis(this.dirX, this.dX) 
-//             this.dirY = this.dirY.applyAxisAngle(this.dirX, this.dX)
-//         }
-
 //      Compute Animation Update:
         for (const [name, clip] of Object.entries(this.animations)) {
             if (clip.completed){
@@ -154,11 +51,9 @@ export class Player {
         up.normalize() 
         // const y = new THREE.Vector3(0,1,0);						// y = up direction in the object space
         const angle = this.y.angleTo(up)   							// Returns the angle between this vector and vector v in radians.
-        
-        if (angle > 0.01) {
-            console.log(up)
+        if (angle > 0.1) {
             const w = new THREE.Vector3().crossVectors(this.y, up)	// w = ortogonal vector between 
-            console.log(angle)
+            console.log(w)
             this.model.rotateOnAxis(w, angle)						// Rotate an object along an axis in object space. The axis is assumed to be normalized.
             this.y = up;
         }
@@ -170,7 +65,7 @@ export class Animation{
     completed = false;
     group = new TWEEN.Group();
     tweens = [];
-    constructor(name, joints, frames, periods, repeat, delay, reset) {
+    constructor(name, joints, frames, periods, delay, repeat, reset) {
         this.playing = false;
         this.name = name;
         this.repeat = repeat;
@@ -189,10 +84,11 @@ export class Animation{
             let firstTween, currentTween;
             for (let j = 0; j < this.frames[i].length; j++) {
                 const tween = new TWEEN.Tween(this.joints[i],this.group).to(this.frames[i][j],this.periods[j]);
-                if (this.delay[j]){
-                    tween.delay(this.delay[j]);
+                if(Array.isArray(this.delay)){
+                    if (this.delay[j]){
+                        tween.delay(this.delay[j]);
+                    }
                 }
-
                 if (j==0) {
                     tween.onComplete(function(){
                         clip.completed = false;
@@ -202,20 +98,21 @@ export class Animation{
                 else currentTween.chain(tween);
                 currentTween = tween;
             }
-
-            // if (this.repeat) {
-            //     const tween = new TWEEN.Tween(this.joints[i],this.group).to(this.frames[i][0],this.periods[0])
-            //     currentTween.onComplete(function() {
-            //         console.log('AMALA');
-            //     })
-            //     currentTween.chain(tween,firstTween)
-            //     //currentTween.chain(firstTween);
-            // }
-            const tween = new TWEEN.Tween(this.joints[i],this.group).to(this.frames[i][0],this.periods[0])
-            currentTween.onComplete(function() {
-                clip.completed = true;
-            })
-            currentTween.chain(tween,firstTween)
+            if (this.repeat) {
+                currentTween.onComplete(function() {
+                    console.log('AMALA');
+                })
+                const tween = new TWEEN.Tween(this.joints[i],this.group).to(this.frames[i][0],this.periods[0])
+                currentTween.chain(tween,firstTween)
+                //currentTween.chain(firstTween);
+            }
+            else {
+                const tween = new TWEEN.Tween(this.joints[i],this.group).to(this.frames[i][0],this.periods[0])
+                currentTween.onComplete(function() {
+                    clip.completed = true;
+                })
+                currentTween.chain(tween,firstTween)
+            }
             //currentTween.chain(firstTween);
             tweens.push(firstTween);
         }
@@ -244,7 +141,6 @@ export class Animation{
         this.group.update();
         if ((this.completed)&&(!this.repeat)) {
             this.stop();
-
         }
     }
 }
