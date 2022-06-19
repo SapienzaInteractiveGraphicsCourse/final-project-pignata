@@ -3,17 +3,15 @@ import {Player} from "./Player.js";
 
 
 export class SpaceShip extends Player {
-	landing = true;
-
 	constructor(model) {
 		super(model)
 		this.y = new THREE.Vector3(0,1,0);
-		this.isMoving = false;
-		this.model.position.set(0, 0, 10.45)
-		this.model.rotation.set(0,0,0)
-		this.model.getObjectByName('frontPanel').rotation.y = Math.PI;
-		this.alignToZenith()
+		this.land = true;
+		this.inAtmosphere = true;
+
+		this.model.getObjectByName('lightTarget').position.set(0,-1,0)
 		model.getObjectByName("SpotLight").target = model.getObjectByName('lightTarget');
+		// this.alignToZenith()
 
 		//  	Input Configuration:
 		window.addEventListener('keydown', (e) => {
@@ -91,42 +89,42 @@ export class SpaceShip extends Player {
 	// 	}
 		// this.animations.MoveTo.start();
 	// }
-	moveTo(position, rotation) {
-		const p = position.clone().normalize()
-		this.y = p;
+	// moveTo(position, rotation) {
+	// 	const p = position.clone().normalize()
+	// 	this.y = p;
 
-		this.animations.MoveTo.frames[0][0] = {
-			x: position.x,
-			y: position.y,
-			z: position.z
-		}
+	// 	this.animations.MoveTo.frames[0][0] = {
+	// 		x: position.x,
+	// 		y: position.y,
+	// 		z: position.z
+	// 	}
 		
-		const dx = rotation.x-this.model.rotation.x
-		const dy = rotation.y-this.model.rotation.y
-		const dz = rotation.z-this.model.rotation.z
+	// 	const dx = rotation.x-this.model.rotation.x
+	// 	const dy = rotation.y-this.model.rotation.y
+	// 	const dz = rotation.z-this.model.rotation.z
 
-		const dX = String(dx.toFixed(2))
-		const dY = String(dy.toFixed(2))
-		const dZ = String(dz.toFixed(2))
+	// 	const dX = String(dx.toFixed(2))
+	// 	const dY = String(dy.toFixed(2))
+	// 	const dZ = String(dz.toFixed(2))
 
 		
-		this.animations.MoveTo.frames[0][1] = {
-			x: rotation.x,
-			y: rotation.y,
-			z: rotation.z,
-		}
+	// 	this.animations.MoveTo.frames[0][1] = {
+	// 		x: rotation.x,
+	// 		y: rotation.y,
+	// 		z: rotation.z,
+	// 	}
 
-			console.log('Euler x: ', this.model.rotation.x, rotation.x)
-			console.log('Euler y: ', this.model.rotation.y, rotation.y)
-			console.log('Euler z: ', this.model.rotation.z, rotation.z)
+	// 		console.log('Euler x: ', this.model.rotation.x, rotation.x)
+	// 		console.log('Euler y: ', this.model.rotation.y, rotation.y)
+	// 		console.log('Euler z: ', this.model.rotation.z, rotation.z)
 
-		if (this.landing){
-			// this.animations.Boarding.start()
-			// this.landing = false
-		}
-		// this.model.getObjectByName('lightTarget').position.set(0,-2,0)
-		this.animations.MoveTo.start()
-	}
+	// 	if (this.landing){
+	// 		// this.animations.Boarding.start()
+	// 		// this.landing = false
+	// 	}
+	// 	// this.model.getObjectByName('lightTarget').position.set(0,-2,0)
+	// 	this.animations.MoveTo.start()
+	// }
 
 
 	// moveTo(position, rotation) {
@@ -137,15 +135,23 @@ export class SpaceShip extends Player {
 	// 	this.model.rotation.set(rotation.x, rotation.y, rotation.z)
 	// }
 
-	moveTo(position, rotation) {
-		this.animations.MoveTo.frames[0] = [
-			{x: position.x, y: position.y +1, z: position.z}
-		]
-		this.animations.MoveTo.frames[1] = [
-			{x: rotation.x, y: rotation.y +1, z: rotation.z}
-		]
-
-		this.animations.MoveTo.start()
+	moveTo(rotationFrame) {
+		this.animations.MoveTo.frames[0].push(rotationFrame)
+		this.animations.MoveTo.frames[1].push({y: '+0'})
+		this.animations.MoveTo.periods.push(500)
+		this.animations.MoveTo.delay.push(false)
+		if (this.land) {
+			let periods = 0.0;
+			this.animations.Boarding.periods.forEach(period => {periods+=period})
+			console.log(periods)
+			this.animations.MoveTo.delay[0] = periods
+			this.animations.Boarding.concat(this.animations.MoveTo)
+			this.animations.Boarding.start()
+			this.land = false
+		}
+		else {
+			this.animations.MoveTo.start()
+		}
 	}
 
 }

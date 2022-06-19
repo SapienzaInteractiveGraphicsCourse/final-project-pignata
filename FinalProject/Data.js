@@ -236,16 +236,16 @@ export const Data = {
     'SpaceShip': {
         animations: {
             'Boarding': {
-                joints: ['leg1', 'leg2', 'leg3','leg4', 'frontPanel'],
-                attributes: ['position', 'position', 'position', 'position', 'rotation'],
+                joints: ['root', 'leg1', 'leg2', 'leg3','leg4'],
+                attributes: ['position', 'position', 'position', 'position', 'position'],
                 frames: [
+                    [{y: '+2'}],
                     [{x:  0.3, y: 0.8, z:  0.3}],
                     [{x: -0.3, y: 0.8, z: -0.3}],
                     [{x:  0.3, y: 0.8, z: -0.3}], 
                     [{x: -0.3, y: 0.8, z:  0.3}], 
-                    [{y: 180*c}]
                 ],
-                periods: [300],
+                periods: [500],
                 delay: false,
                 repeat: false,
                 reset: false,
@@ -256,10 +256,10 @@ export const Data = {
                 attributes: ['rotation', 'position'], 
                 frames: [
                     [{x: '+0', y: '+0', z: '+0'}], 
-                    [{y: '+2'}]
+                    [{y: '+0'}]
                 ],
-                periods: [200],
-                delay: [300],
+                periods: [0],
+                delay: [0],
                 repeat: false,
                 reset: false,
             },

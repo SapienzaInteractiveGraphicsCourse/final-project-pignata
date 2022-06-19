@@ -66,6 +66,7 @@ export class Animation{
     completed = false;
     group = new TWEEN.Group();
     tweens = [];
+    next = null;
     constructor(name, joints, frames, periods, delay, repeat, reset) {
         this.playing = false;
         this.name = name;
@@ -142,7 +143,15 @@ export class Animation{
     update(){
         this.group.update();
         if ((this.completed)&&(!this.repeat)) {
+            if (this.nextAnimation != null){
+                this.nextAnimation.start()
+            } 
             this.stop();
         }
+    }
+
+    concat(animation) {
+//      Concatenate animation parameter to this. 
+        this.nextAnimation = animation;
     }
 }

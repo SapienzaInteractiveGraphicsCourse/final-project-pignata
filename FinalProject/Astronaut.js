@@ -136,16 +136,7 @@ export class Astronaut extends Player {
 			y: this.model.rotation.y,
 			z: this.model.rotation.z,
 		}
-		const heightFrame = {
-			y: '+0'
-		}
-		console.log(ship.animations.MoveTo.frames)
-		ship.animations.MoveTo.frames[0].push(rotationFrame)
-		ship.animations.MoveTo.frames[1].push(heightFrame)
-		ship.animations.MoveTo.periods.push(500)
-		ship.animations.MoveTo.delay.push(false)
-		ship.animations.Boarding.start()
-		ship.animations.MoveTo.start()
+		ship.moveTo(rotationFrame)
 	}
 
 	boarding(ship) {
