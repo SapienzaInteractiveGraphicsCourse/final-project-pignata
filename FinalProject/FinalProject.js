@@ -44,7 +44,7 @@ function init(scene){
 //  Get all nodes names:
     let nodes = [];
     getChildrenNames(scene);
-
+    console.log(nodes)
 //  Set the Camera:
     let camera = scene.getObjectByName("PlayerCam");
     window.addEventListener('resize', resize);
@@ -82,15 +82,6 @@ function init(scene){
 
     }
 
-    function getChildrenNames(obj) {
-        nodes.push(obj.name)
-        if (Array.isArray(obj.children) && obj.children.length){
-            for(let child of obj.children){
-                getChildrenNames(child)
-            }
-        }
-    }
-
     function configureInputs() {
         //TODO: Configure global keyboard inputs...
         window.addEventListener('keydown', (e) => {
@@ -105,6 +96,9 @@ function init(scene){
                 case 'Space':
 					player.callSpaceShip(ship)
                 break;
+                case 'KeyP':
+					player.boarding(ship)
+					break;
             }
         })
         
@@ -192,7 +186,23 @@ function init(scene){
         renderer.setSize(w, h);
         camera.aspect = w / h;
         camera.updateProjectionMatrix();
-    };
+    };    function getChildrenNames(obj) {
+        nodes.push(obj.name)
+        if (Array.isArray(obj.children) && obj.children.length){
+            for(let child of obj.children){
+                getChildrenNames(child)
+            }
+        }
+    }
+
+        function getChildrenNames(obj) {
+        nodes.push(obj.name)
+        if (Array.isArray(obj.children) && obj.children.length){
+            for(let child of obj.children){
+                getChildrenNames(child)
+            }
+        }
+    }
 }
 
 class ColorGUIHelper {

@@ -7,6 +7,9 @@ export class Player {
     constructor(obj){
         this.model = obj;
         this.name = obj.name;
+        this.nodes = [];
+
+        // getChildrenNames(obj)
         console.log("New Player: ", this.name)
 
 //      COMPUTE ANIMATIONS:
@@ -31,9 +34,7 @@ export class Player {
                 }
             clip.completed = false;
             }
-            if (clip.playing){
-                clip.update();
-            }
+            if (clip.playing) clip.update()
         }
     }
 
@@ -82,6 +83,7 @@ export class Animation{
         let tweens = [];
         for (let i = 0; i<this.joints.length; i++){
             let firstTween, currentTween;
+            console.log(this.frames)
             for (let j = 0; j < this.frames[i].length; j++) {
                 const tween = new TWEEN.Tween(this.joints[i],this.group).to(this.frames[i][j],this.periods[j]);
                 if(Array.isArray(this.delay)){

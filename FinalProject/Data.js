@@ -144,7 +144,7 @@ export const Data = {
                 joints: ['root', 'Core', 'upTronco', 'rightHip', 'rightKnee', 'rightAnkle', 'leftHip', 'leftKnee', 'leftAnkle', 'rightShoulder', 'rightElbow', 'leftShoulder', 'leftElbow'],
                 attributes: ['position', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation'],
                 frames: [
-                    [{y: '-0.2'}, {y: '+0.2'}, {y: '+3'}, {y: '-0.2'}, {y: '-3'}],
+                    [{y: '-0.2'}, {y: '+0.2'}, {y: '+1.1'}, {y: '-0.16'}, {y: '-0.5'}],
                     [{x: 25*c}, {x: 10*c}, {x: 0}, {x: 10*c}, {x: 25*c}],
                     [{x: -15*c}, {x: 0}, {x: -10*c},{x: 0}, {x: -15*c}],
 
@@ -162,10 +162,10 @@ export const Data = {
                     [{x: -30*c}, {x: -90*c}, {x: -120*c}, {x: -90*c}, {x: -30*c}],
                     [{x: -90*c, y: -30*c}, {x: -60*c, y: 0}, {x: -45*c}, {x: -60*c, y: 0}, {x: -90*c, y: -30*c},]
                 ],
-                periods: [200, 200, 1000, 400, 1000],
+                periods: [200, 200, 200, 200, 200],
                 delay: [false, 50, false, 100, false],
                 repeat: false,
-                reset: true,
+                reset: false,
 
             },
             'TurnRight': {
@@ -194,15 +194,51 @@ export const Data = {
                 periods: [400],
                 repeat: false,
                 reset: false,
+            },
+            'Boarding': {
+                joints: ['Astronaut', 'root', 'Core', 'upTronco', 'rightHip', 'rightKnee', 'rightAnkle', 'leftHip', 'leftKnee', 'leftAnkle', 'rightShoulder', 'rightElbow', 'leftShoulder', 'leftElbow'],
+                attributes: ['rotation', 'position', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation'],
+                frames: [
+                    [{x: '+0'}, {x:'+0'}, {y: '+3'}],
+                    [{y: '-0.2'}, {y: '+0.2'}],
+                    [{x: 25*c}, {x: 10*c}, {x: 0}],
+                    [{x: -15*c}, {x: 0}, {x: -10*c},],
+                    [{x: -55*c}, {x: 15*c}],
+                    [{x: 80*c}, {x: -15*c}],
+                    [{y: 25*c}, {y: -30*c}],
+                    [{x: -55*c}, {x: 15*c}],
+                    [{x: 80*c}, {x: -15*c}],
+                    [{y: 25*c}, {y: -30*c}],
+                    [{x: -30*c}, {x: -90*c}],
+                    [{x: -90*c, y: -30*c}],
+                    [{x: -30*c}, {x: -90*c}],
+                    [{x: -90*c, y: -30*c}],
+                ],
+                periods: [250, 200],
+                delay: [false, 50],
+                repeat: false,
+                reset: false
+            },
+            'MoveTo': {
+                joints: ['Astronaut', 'root'],
+                attributes: ['rotation', 'position'],
+                frames: [
+                    [{x: '+0'}],
+                    [{y: '+0'}]
+                ],
+                periods: [500],
+                delay: false,
+                repeat: false,
+                reset: false
             }
         }
     },
     'SpaceShip': {
         animations: {
             'Boarding': {
-                joints: ['leg1', 'leg2', 'leg3','leg4'],
-                attributes: ['position', 'position', 'position', 'position'],
-                frames: [[{x:  0.3, y: 0.8, z:  0.3}],[{x: -0.3, y: 0.8, z: -0.3}],[{x:  0.3, y: 0.8, z: -0.3}], [{x: -0.3, y: 0.8, z:  0.3}]],
+                joints: ['leg1', 'leg2', 'leg3','leg4', 'frontPanel'],
+                attributes: ['position', 'position', 'position', 'position', 'rotation'],
+                frames: [[{x:  0.3, y: 0.8, z:  0.3}],[{x: -0.3, y: 0.8, z: -0.3}],[{x:  0.3, y: 0.8, z: -0.3}], [{x: -0.3, y: 0.8, z:  0.3}, {y: 180*c}]],
                 periods: [300],
                 delay: false,
                 repeat: false,
@@ -212,12 +248,16 @@ export const Data = {
             'MoveTo': {
                 joints: ['SpaceShip', 'SpaceShip'],
                 attributes: ['position', 'rotation'], 
-                frames: [[{x: 0, y: 10.45, z: 0}], [{x: 0, y: 0, z: 0}]],
+                frames: [
+                    [{x: 0, y: 10.45, z: 0}], 
+                    [{x: 0, y: 0, z: 0}]
+                ],
                 periods: [1000],
                 dealy: [300],
                 repeat: false,
                 reset: false,
-            }
+            },
+
             // 'MoveTo': {
             //     joints: ['SpaceShip'],
             //     attributes: ['position'], 

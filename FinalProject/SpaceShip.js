@@ -11,6 +11,7 @@ export class SpaceShip extends Player {
 		this.isMoving = false;
 		this.model.position.set(0, 0, 10.45)
 		this.model.rotation.set(0,0,0)
+		this.model.getObjectByName('frontPanel').rotation.y = Math.PI;
 		this.alignToZenith()
 		model.getObjectByName("SpotLight").target = model.getObjectByName('lightTarget');
 
@@ -135,4 +136,16 @@ export class SpaceShip extends Player {
 	// 	this.model.position.set(position.x, position.y, position.z)
 	// 	this.model.rotation.set(rotation.x, rotation.y, rotation.z)
 	// }
+
+	moveTo(position, rotation) {
+		this.animations.MoveTo.frames[0] = [
+			{x: position.x, y: position.y +1, z: position.z}
+		]
+		this.animations.MoveTo.frames[1] = [
+			{x: rotation.x, y: rotation.y, z: rotation.z}
+		]
+
+		this.animations.MoveTo.start()
+	}
+
 }

@@ -1,4 +1,5 @@
 import * as THREE from '../resources/three/build/three.module.js';
+import {TWEEN} from "../resources/three/examples/jsm/libs/tween.module.min.js"
 import {Player} from "./Player.js"
 
 export class Astronaut extends Player {
@@ -60,6 +61,7 @@ export class Astronaut extends Player {
                     this.gravity = !this.gravity;
                     console.log('Gravity: ', this.gravity)
                 break;
+
             }
         });
         window.addEventListener('keyup', (e) => {
@@ -105,6 +107,7 @@ export class Astronaut extends Player {
             this.model.rotateOnWorldAxis(this.dirX, this.dX) 
             this.dirY = this.dirY.applyAxisAngle(this.dirX, this.dX)
         }
+		TWEEN.update()
 
 	}
 
@@ -113,17 +116,34 @@ export class Astronaut extends Player {
 		let spherical = new THREE.Spherical()
 		let position = new THREE.Vector3()
 		this.model.getObjectByName('root').getWorldPosition(position)
-		// console.log("Astronaut Coords: \n",position)
+		console.log("Astronaut Coords: \n",position)
 		spherical.setFromVector3(position);
 		// console.log(spherical)
 		// console.log(spherical);
-		// spherical.radius += 2;
-		spherical.radius -= 0.1;
+		spherical.radius += 1;
+		// spherical.radius -= 0.1;
 
 		let shipEndPosition = new THREE.Vector3();
 		shipEndPosition.setFromSpherical(spherical)
 		// console.log('Spaceship Required Position for Boarding:\n', shipEndPosition)
 		spaceShip.moveTo(shipEndPosition, this.model.rotation)
+	}
+
+	boarding(ship) {
+		let spherical = new THREE.Spherical().setFromVector3(this.model.getObjectByName('root').position)
+		let spherical2 = new THREE.Spherical().setFromVector3(ship.model.position)
+		const dPhi = spherical2.phi - spherical.phi
+		console.log('dPhi : ', dPhi)
+		// console.log("Astronaut Coords: \n",position)
+		// this.model.rotateOnWorldAxis(this.dirX, dPhi) 
+		// this.model.getObjectByName('Astronaut').rotation.x = spherical2.phi
+		// const tweenX = new TWEEN.Tween(this.model.getObjectByName('Astronaut').rotation).to({x: spherical2.phi},1000).start()
+		// const tweenY = new TWEEN.Tween(this.model.gwt).to({x: spherical2.phi},1000).start()
+		console.log(this.animations.MoveTo.joints)
+		this.animations.MoveTo.frames[0] = [{x: spherical2.phi}]
+		this.animations.MoveTo.frames[1] = [{y: 10.56}]
+		this.animations.MoveTo.start()
+		this.dirY = this.dirY.applyAxisAngle(this.dirX, dPhi)	
 	}
 
 	get moving(){
