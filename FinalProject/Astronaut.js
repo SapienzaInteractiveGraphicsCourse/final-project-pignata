@@ -1,5 +1,4 @@
 import * as THREE from '../resources/three/build/three.module.js';
-import {TWEEN} from "../resources/three/examples/jsm/libs/tween.module.min.js"
 import {Player} from "./Player.js"
 
 export class Astronaut extends Player {
@@ -20,6 +19,18 @@ export class Astronaut extends Player {
         this.model.getObjectByName("lightEye").add(lightTarget);
         lightTarget.position.set(0,-1,1);
         this.model.getObjectByName("lightEye").target = lightTarget;
+		const animations = this.animations;
+
+		this.animations.TurnBack.onStart = function(){
+			// animations.Run.delay = [500]
+			animations.Run.start()
+		}
+
+		this.animations.TurnBack.onComplete = function() {
+			animations.Run.stop()
+			// animations.Run.delay = false
+			animations.Reset.start()
+		}
 
 		//      Input Configuration:
         window.addEventListener('keydown', (e) => {
@@ -48,21 +59,25 @@ export class Astronaut extends Player {
                 break;
                 case "KeyS":
                     this.animations.TurnBack.start();
-                    this.dirX = this.dirX.applyAxisAngle(this.dirY, 3.1415)
-                break;
+                    // this.fw = this.dirX.applyAxisAngle(this.dirY, 3.1415)
+                	break;
                 case "KeyJ":
                     // if (this.animations.Walk.playing) this.animations.Walk.stop()
                     clipName = (this.gravity) ? 'Jump' : 'nJump'
                     this.animations[clipName].start()
-                break;
+                	break;
                 case "KeyR":
                     this.animations.Reset.playng = false;
                     this.animations.Reset.start();
-                break;
+                	break;
                 case 'KeyG':
                     this.gravity = !this.gravity;
                     console.log('Gravity: ', this.gravity)
-                break;
+                	break;
+				case 'Digit9':
+					console.log(this.animations.Crunch)
+					this.animations.Crunch.start()
+					break;
 
             }
         });
@@ -121,6 +136,15 @@ export class Astronaut extends Player {
 			z: this.model.rotation.z,
 		}
 		ship.moveTo(rotationFrame)
+		this.animations.MoveTo.frames[1] = [{y: '+2'}]
+		this.animations.MoveTo.delay = [1000]
+		this.animations.Crunch.delay = [1000]
+		// this.animations.TurnBack.concat = this.animations.MoveTo
+		this.animations.CamTransition.concat = [this.animations.MoveTo, this.animations.Crunch]
+		this.animations.TurnBack.start()
+		this.animations.CamTransition.start()
+		// this.animations.TurnBack.start()
+
 	}
 
 	boarding(ship) {

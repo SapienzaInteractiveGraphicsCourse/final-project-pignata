@@ -24,11 +24,12 @@ export class Player {
 //      COMPUTE ANIMATIONS:
         for (const [name, clip] of Object.entries(Data[this.name].animations)) {
             let joints = [];
+            console.log(name)
             clip.joints.forEach((joint, i) => {
                 joints.push(obj.getObjectByName(joint)[clip.attributes[i]])
             });
             this.animations[name] = new Animation(name, joints, clip.frames, clip.periods, clip.delay, clip.repeat, clip.reset);
-            if (this.animations[name].reset) this.animations[name]. concat = this.animations.Reset
+            if (this.animations[name].reset) this.animations[name].concat = [this.animations.Reset]
         }
 
         function getChildrenNames(obj, nodes) {
@@ -49,8 +50,8 @@ export class Player {
             const dirZ = new THREE.Vector3( 0, 0, 1 );
                 const arrowHelpers = [
                     new THREE.ArrowHelper(fw, origin, length-0.1, 0xFFFFFF),
-                    new THREE.ArrowHelper(up, origin, length -0.2, 0x00FF00),
-                    new THREE.ArrowHelper(w, origin, length-0.2, 0xFF0000),
+                    // new THREE.ArrowHelper(up, origin, length -0.2, 0x00FF00),
+                    // new THREE.ArrowHelper(w, origin, length-0.2, 0xFF0000),
                     new THREE.ArrowHelper( dirX, origin, length, 0xFF0000),
                     new THREE.ArrowHelper( dirY, origin, length, 0x00FF00),
                     new THREE.ArrowHelper( dirZ, origin, length, 0x0000FF),
@@ -90,8 +91,8 @@ export class Player {
 
         const arrows = root.getObjectByName("Arrows").children
         arrows[0].setDirection(this.fw)
-        arrows[1].setDirection(this.up)
-        arrows[2].setDirection(this.w)
+        // arrows[1].setDirection(this.up)
+        // arrows[2].setDirection(this.w)
     }
 
     reset(){
@@ -152,8 +153,9 @@ export class Animation{
             let firstTween, currentTween;
             for (let j = 0; j < this.frames[i].length; j++) {
                 const tween = new TWEEN.Tween(this.joints[i],this.group).to(this.frames[i][j],this.periods[j]);
-                if(Array.isArray(this.delay)){
-                    if (this.delay[j]){
+                if(this.delay != false && this.delay != undefined){
+                    if (this.delay[j] != false && this.delay[j] != undefined){
+                        console.log(this.delay[j])
                         tween.delay(this.delay[j]);
                     }
                 }
@@ -189,6 +191,7 @@ export class Animation{
     }
 
     start() {
+        this.onStart()
         if(!this.playing){
             this.setTweens(this);
             this.tweens.forEach((tween) => {
@@ -202,27 +205,29 @@ export class Animation{
         if(this.playing){
             this.playing = false;
             this.group.getAll().forEach((tween) => tween.stop());
+        
         }
     }
 
     update(){
+        this.onUpdate();
         this.group.update();
         if ((this.completed)&&(!this.repeat)) {
             this.onComplete()
-            if (this.nextAnimation != null){
-                this.nextAnimation.start()
+            if (this.next != null){
+                this.next.forEach(animation => {animation.start()})
             } 
             this.stop();
         }
     }
 
-    onComplete(){
-        console.log(this.name)
-    }
+    onComplete(){}
+    onStart(){}
+    onUpdate(){}
 
-    set concat(animation) {
+    set concat(animations) {
 //      Concatenate animation parameter to this. 
-        this.nextAnimation = animation;
+        this.next = animations;
     }
 
     get reverse(){

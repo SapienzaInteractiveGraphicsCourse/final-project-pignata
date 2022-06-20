@@ -5,17 +5,17 @@ import {Player} from "./Player.js";
 export class SpaceShip extends Player {
 	constructor(model) {
 		super(model)
-		this.y = new THREE.Vector3(0,1,0);
+		model.getObjectByName('Arrows').visible = false;
+		console.log(this.animations.Doors)
 		this.land = true;
 		this.inAtmosphere = true;
-		// console.log(this.nodes)
+		console.log(this.nodes)
 
 		this.model.getObjectByName('lightTarget').position.set(0,-1,0)
 		model.getObjectByName("SpotLight").target = model.getObjectByName('lightTarget');
 		// this.alignToZenith()
 
 		this.animations.Boarding.onComplete = function() {
-			console.log(model.getObjectByName('Legs'))		
 			model.getObjectByName('Legs').visible = !model.getObjectByName('Legs').visible		
 		}
 
@@ -31,6 +31,11 @@ export class SpaceShip extends Player {
 					break;
 				case 'KeyM':
 					this.animations.MoveTo.start();	
+					break;
+				case 'KeyO':
+					// this.animations.Doors.start();
+					this.model.getObjectByName('Door1').rotation.z = Math.PI/2;
+					this.model.getObjectByName('Door2').rotation.z =   - Math.PI/2;
 			}
 		})
 
@@ -163,11 +168,12 @@ export class SpaceShip extends Player {
 		// this.animations.MoveTo.frames[1]. [{y: '+0'}]
 		this.animations.MoveTo.periods[0] = 1000
 		this.animations.MoveTo.delay = false
+		this.animations.MoveTo.concat = [this.animations.Doors]
 		if (this.land) {
 			// let periods = 0.0;
 			// this.animations.Boarding.periods.forEach(period => {periods+=period})
 			// this.animations.MoveTo.delay[0] = periods
-			this.animations.Boarding.concat = this.animations.MoveTo
+			this.animations.Boarding.concat = [this.animations.MoveTo]
 			this.animations.Boarding.start()
 			this.land = false
 		}

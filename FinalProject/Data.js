@@ -52,7 +52,7 @@ export const Data = {
                 ],
                 periods: [200, 400, 400, 200, 200, 400, 400, 200],
                 delay: false,
-                repeat: false,
+                repeat: true,
                 reset: true,
 
             },
@@ -108,7 +108,7 @@ export const Data = {
                 periods: new Array(8).fill(100),
                 delay: false,
                 repeat: true,
-                reset: true,
+                reset: false,
             },
 
             'Jump': {   // Jump with NO gravity
@@ -186,12 +186,16 @@ export const Data = {
                 repeat: false,
                 reset: false,
             },
+
             'TurnBack': {
-                joints: ['Astronaut'],
-                attributes: ['rotation'],
-                frames: [[{y: '+3.1415'}]],
-                delay: [false],
-                periods: [400],
+                joints: ['Torso', 'Legs'],
+                attributes: ['rotation', 'rotation'],
+                frames: [
+                    [{y: '+3.1415'}],
+                    [{y: '+3.1415'}]
+                ],
+                delay: [0],
+                periods: [500],
                 repeat: false,
                 reset: false,
             },
@@ -226,11 +230,42 @@ export const Data = {
                     [{x: '+0'}],
                     [{y: '+0'}]
                 ],
-                periods: [500],
+                periods: [1500],
+                delay: [0],
+                repeat: false,
+                reset: false
+            },
+            'CamTransition': {
+                joints: ['PlayerCam', 'PlayerCam'],
+                attributes: ['rotation', 'position'],
+                frames:[
+                    [{x: -180*c}],
+                    [{y: 0.56, z: -5}]
+                ],
+                periods: [1300],
+                delay: [0],
+                repeat: false,
+                reset: false
+            },
+            'Crunch': {
+                joints: ['upTronco', 'rightShoulder', 'leftShoulder', 'rightElbow', 'leftElbow', 'rightHip', 'leftHip', 'rightKnee', 'leftKnee'],
+                attributes: ['rotation','rotation','rotation','rotation','rotation','rotation','rotation','rotation','rotation'],
+                frames: [
+                    [{x: 20*c}],
+                    [{x: -45*c}],
+                    [{x: -45*c}],
+                    [{x: -90*c}],
+                    [{x: -90*c}],
+                    [{x: -90*c}],
+                    [{x: -90*c}],
+                    [{x: 120*c}],
+                    [{x: 120*c}],
+                ],
+                periods: [800],
                 delay: false,
                 repeat: false,
                 reset: false
-            }
+            },
         }
     },
     'SpaceShip': {
@@ -263,6 +298,19 @@ export const Data = {
                 repeat: false,
                 reset: false,
             },
+
+            'Doors': {
+                joints: ['Door1', 'Door2'],
+                attributes: ['rotation', 'rotation'],
+                frames: [
+                    [{z: 90*c}, {z: 0}],
+                    [{z: -90*c}, {z: 0}]
+                ],
+                periods: [500, 500],
+                delay: [250, 1500],
+                repeat: false,
+                reset: false,
+            }
 
             // 'MoveTo': {
             //     joints: ['SpaceShip'],
