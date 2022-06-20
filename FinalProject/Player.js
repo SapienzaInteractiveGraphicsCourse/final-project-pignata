@@ -9,7 +9,7 @@ export class Player {
         this.name = obj.name;
         this.nodes = [];
 
-        // getChildrenNames(obj)
+        getChildrenNames(obj, this.nodes)
         console.log("New Player: ", this.name)
 
 //      COMPUTE ANIMATIONS:
@@ -19,6 +19,16 @@ export class Player {
                 joints.push(obj.getObjectByName(joint)[clip.attributes[i]])
             });
             this.animations[name] = new Animation(name, joints, clip.frames, clip.periods, clip.delay, clip.repeat, clip.reset);
+            if (this.animations[name].reset) this.animations[name]. concat = this.animations.Reset
+        }
+
+        function getChildrenNames(obj, nodes) {
+            nodes.push(obj.name)
+            if (Array.isArray(obj.children) && obj.children.length){
+                for(let child of obj.children){
+                    getChildrenNames(child, nodes)
+                }
+            }
         }
     }
 
@@ -30,7 +40,7 @@ export class Player {
                 //clip.setTweens();
                 if(clip.reset){
                     console.log('reset');
-                    this.reset();
+                    // this.reset();
                 }
             clip.completed = false;
             }
@@ -59,6 +69,16 @@ export class Player {
             this.y = up;
         }
     }
+
+    getChildrenNames(obj) {
+        this.nodes.push(obj.name)
+        if (Array.isArray(obj.children) && obj.children.length){
+            for(let child of obj.children){
+                this.getChildrenNames(child)
+            }
+        }
+    }
+
 }
 
 export class Animation{
@@ -84,7 +104,6 @@ export class Animation{
         let tweens = [];
         for (let i = 0; i<this.joints.length; i++){
             let firstTween, currentTween;
-            console.log(this.frames)
             for (let j = 0; j < this.frames[i].length; j++) {
                 const tween = new TWEEN.Tween(this.joints[i],this.group).to(this.frames[i][j],this.periods[j]);
                 if(Array.isArray(this.delay)){
@@ -143,6 +162,7 @@ export class Animation{
     update(){
         this.group.update();
         if ((this.completed)&&(!this.repeat)) {
+            this.onComplete()
             if (this.nextAnimation != null){
                 this.nextAnimation.start()
             } 
@@ -150,8 +170,28 @@ export class Animation{
         }
     }
 
-    concat(animation) {
+    onComplete(){
+        console.log(this.name)
+    }
+
+    set concat(animation) {
 //      Concatenate animation parameter to this. 
         this.nextAnimation = animation;
+    }
+
+    get reverse(){
+        const reversedFrames = []
+        this.frames.forEach(frame => {
+            reversedFrames.push(frame.reverse())
+        })
+        return new Animation(
+            this.name + 'Reverse',
+            this.joints,
+            reversedFrames,
+            this.periods,
+            this.delay,
+            this.repeat,
+            this.reset
+        )
     }
 }

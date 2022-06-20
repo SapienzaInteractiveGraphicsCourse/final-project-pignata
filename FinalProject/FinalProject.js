@@ -44,7 +44,6 @@ function init(scene){
 //  Get all nodes names:
     let nodes = [];
     getChildrenNames(scene);
-    console.log(nodes)
 //  Set the Camera:
     let camera = scene.getObjectByName("PlayerCam");
     window.addEventListener('resize', resize);
@@ -66,6 +65,7 @@ function init(scene){
     // const spherical = new
     // ship.position.setF
 
+
 //  Function calls:
     configureInputs();
     setArrowHelpers();
@@ -78,6 +78,7 @@ function init(scene){
         player.update();
         ship.update()
         orbits();
+        arrow.setDirection(dir)
         renderer.render(scene, camera);
 
     }
@@ -128,7 +129,8 @@ function init(scene){
             const arrowHelpers = [
             new THREE.ArrowHelper( dirX, origin, length, 0xFF0000),
             new THREE.ArrowHelper( dirY, origin, length, 0x00FF00),
-            new THREE.ArrowHelper( dirZ, origin, length, 0x0000FF)
+            new THREE.ArrowHelper( dirZ, origin, length, 0x0000FF),
+            // new THREE.ArrowHelper( dirZ, origin, length-0.2, hex),
         ];
         arrowHelpers.forEach((arrow) => {astronaut.getObjectByName('root').add(arrow);});
     }

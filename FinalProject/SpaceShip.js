@@ -8,10 +8,16 @@ export class SpaceShip extends Player {
 		this.y = new THREE.Vector3(0,1,0);
 		this.land = true;
 		this.inAtmosphere = true;
+		console.log(this.nodes)
 
 		this.model.getObjectByName('lightTarget').position.set(0,-1,0)
 		model.getObjectByName("SpotLight").target = model.getObjectByName('lightTarget');
 		// this.alignToZenith()
+
+		this.animations.Boarding.onComplete = function() {
+			console.log(model.getObjectByName('Legs'))		
+			model.getObjectByName('Legs').visible = !model.getObjectByName('Legs').visible		
+		}
 
 		//  	Input Configuration:
 		window.addEventListener('keydown', (e) => {
@@ -136,16 +142,32 @@ export class SpaceShip extends Player {
 	// }
 
 	moveTo(rotationFrame) {
-		this.animations.MoveTo.frames[0].push(rotationFrame)
-		this.animations.MoveTo.frames[1].push({y: '+0'})
-		this.animations.MoveTo.periods.push(500)
-		this.animations.MoveTo.delay.push(false)
+		const dx = rotationFrame.x - this.model.rotation.x;
+		const dy = rotationFrame.y - this.model.rotation.y;
+		const dz = rotationFrame.z - this.model.rotation.z;
+
+		const dX = (dx >=0) ? String().concat('+',dx.toFixed(3)) : String(dx.toFixed(3))
+		const dY = (dy >=0) ? String().concat('+',dy.toFixed(3)) : String(dy.toFixed(3))
+		const dZ = (dz >=0) ? String().concat('+',dz.toFixed(3)) : String(dz.toFixed(3))
+		console.log('dX: ', dX)
+		console.log('dY: ', dY)
+		console.log('dZ: ', dZ)
+
+		const frame = {
+			x: dX,
+			y: dY,
+			z: dZ,
+		}
+
+		this.animations.MoveTo.frames[0] = [frame]
+		// this.animations.MoveTo.frames[1]. [{y: '+0'}]
+		this.animations.MoveTo.periods[0] = 1000
+		this.animations.MoveTo.delay = false
 		if (this.land) {
-			let periods = 0.0;
-			this.animations.Boarding.periods.forEach(period => {periods+=period})
-			console.log(periods)
-			this.animations.MoveTo.delay[0] = periods
-			this.animations.Boarding.concat(this.animations.MoveTo)
+			// let periods = 0.0;
+			// this.animations.Boarding.periods.forEach(period => {periods+=period})
+			// this.animations.MoveTo.delay[0] = periods
+			this.animations.Boarding.concat = this.animations.MoveTo
 			this.animations.Boarding.start()
 			this.land = false
 		}

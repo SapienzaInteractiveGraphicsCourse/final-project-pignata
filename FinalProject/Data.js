@@ -111,7 +111,7 @@ export const Data = {
                 reset: true,
             },
 
-            'nJump': {   // Jump with NO gravity
+            'Jump': {   // Jump with NO gravity
                 joints: ['root', 'Core', 'upTronco', 'rightHip', 'rightKnee', 'rightAnkle', 'leftHip', 'leftKnee', 'leftAnkle', 'rightShoulder', 'rightElbow', 'leftShoulder', 'leftElbow'],
                 attributes: ['position', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation'],
                 frames: [
@@ -140,11 +140,11 @@ export const Data = {
 
             },
 
-            'Jump': {   // Jump with gravity
+            'nJump': {   // Jump with NO gravity
                 joints: ['root', 'Core', 'upTronco', 'rightHip', 'rightKnee', 'rightAnkle', 'leftHip', 'leftKnee', 'leftAnkle', 'rightShoulder', 'rightElbow', 'leftShoulder', 'leftElbow'],
                 attributes: ['position', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation'],
                 frames: [
-                    [{y: '-0.2'}, {y: '+0.2'}, {y: '+1.1'}, {y: '-0.16'}, {y: '-0.5'}],
+                    [{y: '-0.2'}, {y: '+0.2'}, {y: '+3'}, {y: '-0.2'}, {y: '-3'}],
                     [{x: 25*c}, {x: 10*c}, {x: 0}, {x: 10*c}, {x: 25*c}],
                     [{x: -15*c}, {x: 0}, {x: -10*c},{x: 0}, {x: -15*c}],
 
@@ -162,10 +162,10 @@ export const Data = {
                     [{x: -30*c}, {x: -90*c}, {x: -120*c}, {x: -90*c}, {x: -30*c}],
                     [{x: -90*c, y: -30*c}, {x: -60*c, y: 0}, {x: -45*c}, {x: -60*c, y: 0}, {x: -90*c, y: -30*c},]
                 ],
-                periods: [200, 200, 200, 200, 200],
+                periods: [200, 200, 800, 200, 800],
                 delay: [false, 50, false, 100, false],
                 repeat: false,
-                reset: false,
+                reset: true,
 
             },
             'TurnRight': {
