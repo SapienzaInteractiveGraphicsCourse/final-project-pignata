@@ -62,8 +62,15 @@ export class Astronaut extends Player {
                     // this.fw = this.dirX.applyAxisAngle(this.dirY, 3.1415)
                 	break;
                 case "KeyJ":
-                    // if (this.animations.Walk.playing) this.animations.Walk.stop()
-                    clipName = (this.gravity) ? 'Jump' : 'nJump'
+					clipName = (this.gravity) ? 'Jump' : 'nJump'
+                    if (this.animations.Walk.playing) {
+						const walk = this.animations.Walk
+						walk.stop()
+						const moving = this.moving
+						this.animations[clipName].onComplete = function() {
+							if(moving) walk.start()
+						}
+					}
                     this.animations[clipName].start()
                 	break;
                 case "KeyR":
