@@ -4,9 +4,9 @@ import {Player} from "./Player.js"
 
 export class Astronaut extends Player {
 	//  Position Parameters:
-    dirX = new THREE.Vector3( 1, 0, 0 );
-    dirY = new THREE.Vector3( 0, 1, 0 );
-    dirZ = new THREE.Vector3( 0, 0, 1);
+    // dirX = new THREE.Vector3( 1, 0, 0 );
+    // dirY = new THREE.Vector3( 0, 1, 0 );
+    // dirZ = new THREE.Vector3( 0, 0, 1);
     dX = 0.0;                                       // Increment of X Angle Rotation        
     dY = 0.0;                                       // Increment of Y Angle Rotation
     gravity = false;    
@@ -100,18 +100,17 @@ export class Astronaut extends Player {
     }
 	
 	update() {
-		super.update();
 		//      Compute Momevent Update:
         if(this.dY!=0){
-            this.model.rotateOnWorldAxis(this.dirY, this.dY)
-            this.dirX = this.dirX.applyAxisAngle(this.dirY, this.dY)
+			this.model.rotateOnWorldAxis(this.up, this.dY)
+            // this.fw = this.dirX.applyAxisAngle(this.dirY, this.dY)
+			// this.updateAxis()
         }
         if(this.dX!=0){
-            this.model.rotateOnWorldAxis(this.dirX, this.dX) 
-            this.dirY = this.dirY.applyAxisAngle(this.dirX, this.dX)
+			this.model.rotateOnWorldAxis(this.w, -this.dX) 
+            // this.dirY = this.dirY.applyAxisAngle(this.dirX, this.dX)
         }
-		TWEEN.update()
-
+		super.update();
 	}
 
 	callSpaceShip(ship) {

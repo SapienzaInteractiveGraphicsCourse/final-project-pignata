@@ -68,7 +68,7 @@ function init(scene){
 
 //  Function calls:
     configureInputs();
-    setArrowHelpers();
+    // setArrowHelpers();
     guiOptions();
     render();
 
@@ -78,9 +78,7 @@ function init(scene){
         player.update();
         ship.update()
         orbits();
-        arrow.setDirection(dir)
         renderer.render(scene, camera);
-
     }
 
     function configureInputs() {

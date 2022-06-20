@@ -2,13 +2,22 @@ import * as THREE from '../resources/three/build/three.module.js';
 import {Data} from "./Data.js"
 
 export class Player {
+    // active = false;
     animations = {};
 // //  Position Parameters:
     constructor(obj){
         this.model = obj;
         this.name = obj.name;
         this.nodes = [];
-
+        this.fw = new THREE.Vector3(0,0,1);  // Forward Direction
+        this.up = new THREE.Vector3(0,1,0);   // Up Direction
+        this.w = new THREE.Vector3(1,0,0);   // Tangent Direction
+        setArrowHelpers(obj.getObjectByName('root'), this.fw, this.up, this.w)
+        this.updateAxis()
+        console.log('fw: ', this.fw)
+        console.log('up: ', this.up)
+        console.log('w:',  this.w)
+ 
         getChildrenNames(obj, this.nodes)
         console.log("New Player: ", this.name)
 
@@ -30,6 +39,29 @@ export class Player {
                 }
             }
         }
+
+        function setArrowHelpers(root, fw , up, w){
+            //      Set the Arrow Helpers for directions...
+            const origin = new THREE.Vector3(-1.5, -0.5, 0);
+            const length = 0.4;
+            const dirX = new THREE.Vector3( 1, 0, 0 );
+            const dirY = new THREE.Vector3( 0, 1, 0 );
+            const dirZ = new THREE.Vector3( 0, 0, 1 );
+                const arrowHelpers = [
+                    new THREE.ArrowHelper(fw, origin, length-0.1, 0xFFFFFF),
+                    new THREE.ArrowHelper(up, origin, length -0.2, 0x00FF00),
+                    new THREE.ArrowHelper(w, origin, length-0.2, 0xFF0000),
+                    new THREE.ArrowHelper( dirX, origin, length, 0xFF0000),
+                    new THREE.ArrowHelper( dirY, origin, length, 0x00FF00),
+                    new THREE.ArrowHelper( dirZ, origin, length, 0x0000FF),
+                ];
+            const arrows = new THREE.Group()
+            arrows.name = 'Arrows'
+            arrowHelpers.forEach((arrow) => {arrows.add(arrow);});
+            root.add(arrows)
+
+        }
+            
     }
 
     update() {
@@ -46,6 +78,20 @@ export class Player {
             }
             if (clip.playing) clip.update()
         }
+        this.updateAxis()
+    }
+
+    updateAxis() {
+        const root =  this.model.getObjectByName('root')
+        root.getWorldDirection( this.fw ) // Returns a vector representing the direction of object's positive z-axis in world space.
+        root.getWorldPosition(this.up)
+        this.up.normalize()
+        this.w.crossVectors(this.fw, this.up)
+
+        const arrows = root.getObjectByName("Arrows").children
+        arrows[0].setDirection(this.fw)
+        arrows[1].setDirection(this.up)
+        arrows[2].setDirection(this.w)
     }
 
     reset(){

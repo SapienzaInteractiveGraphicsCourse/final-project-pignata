@@ -8,7 +8,7 @@ export class SpaceShip extends Player {
 		this.y = new THREE.Vector3(0,1,0);
 		this.land = true;
 		this.inAtmosphere = true;
-		console.log(this.nodes)
+		// console.log(this.nodes)
 
 		this.model.getObjectByName('lightTarget').position.set(0,-1,0)
 		model.getObjectByName("SpotLight").target = model.getObjectByName('lightTarget');
