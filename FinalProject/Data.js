@@ -172,6 +172,7 @@ export const Data = {
                 joints: ['root','leftAnkle','rightAnkle', 'upTronco'],
                 attributes: ['rotation', 'rotation', 'rotation', 'rotation'],
                 frames: [[{y: '-0.0'}],[{x: '-0.6'}],[{x: '-0.6'}],[{y: '-0.4'}]],
+                // frames: [[{y: '-0.0'}],[{x: '-0.6'}],[{x: '-0.6'}],[{y: '-0.4'}]],
                 periods: [200],
                 delay: false,
                 repeat: false,
@@ -291,7 +292,7 @@ export const Data = {
                 attributes: ['rotation', 'position'], 
                 frames: [
                     [{x: '+0', y: '+0', z: '+0'}], 
-                    [{y: '+0'}]
+                    [{y: '+0'}],
                 ],
                 periods: [0],
                 delay: [0],

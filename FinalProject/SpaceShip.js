@@ -4,6 +4,7 @@ import {Player} from "./Player.js";
 
 export class SpaceShip extends Player {
 	constructor(model) {
+		model.getObjectByName('shipCam').name = 'PlayerCam'
 		super(model)
 		model.getObjectByName('Arrows').visible = false;
 		console.log(this.animations.Doors)

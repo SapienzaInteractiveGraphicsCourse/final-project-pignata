@@ -4,27 +4,32 @@ import {Data} from "./Data.js"
 export class Player {
     // active = false;
     animations = {};
+    playlist = 0;              // number of current animations playing.
+
+
 // //  Position Parameters:
     constructor(obj){
         this.model = obj;
         this.name = obj.name;
         this.nodes = [];
+        getChildrenNames(obj, this.nodes)
         this.fw = new THREE.Vector3(0,0,1);  // Forward Direction
         this.up = new THREE.Vector3(0,1,0);   // Up Direction
         this.w = new THREE.Vector3(1,0,0);   // Tangent Direction
-        setArrowHelpers(obj.getObjectByName('root'), this.fw, this.up, this.w)
+
+        this.cam = obj.getObjectByName('PlayerCam');
+        // setArrowHelpers(obj.getObjectByName('root'), this.fw, this.up, this.w)
+        setArrowHelpers(this.cam, this.fw, this.up, this.w)
         this.updateAxis()
         console.log('fw: ', this.fw)
         console.log('up: ', this.up)
         console.log('w:',  this.w)
  
-        getChildrenNames(obj, this.nodes)
         console.log("New Player: ", this.name)
 
 //      COMPUTE ANIMATIONS:
         for (const [name, clip] of Object.entries(Data[this.name].animations)) {
             let joints = [];
-            console.log(name)
             clip.joints.forEach((joint, i) => {
                 joints.push(obj.getObjectByName(joint)[clip.attributes[i]])
             });
@@ -41,15 +46,15 @@ export class Player {
             }
         }
 
-        function setArrowHelpers(root, fw , up, w){
+        function setArrowHelpers(cam, fw , up, w){
             //      Set the Arrow Helpers for directions...
-            const origin = new THREE.Vector3(-1.5, -0.5, 0);
-            const length = 0.4;
+            const origin = new THREE.Vector3( 0.2 , -0.15, -0.5);
+            const length = 0.1;
             const dirX = new THREE.Vector3( 1, 0, 0 );
             const dirY = new THREE.Vector3( 0, 1, 0 );
             const dirZ = new THREE.Vector3( 0, 0, 1 );
                 const arrowHelpers = [
-                    new THREE.ArrowHelper(fw, origin, length-0.1, 0xFFFFFF),
+                    new THREE.ArrowHelper(fw, origin, length*0.8, 0xFFFFFF),
                     // new THREE.ArrowHelper(up, origin, length -0.2, 0x00FF00),
                     // new THREE.ArrowHelper(w, origin, length-0.2, 0xFF0000),
                     new THREE.ArrowHelper( dirX, origin, length, 0xFF0000),
@@ -59,7 +64,7 @@ export class Player {
             const arrows = new THREE.Group()
             arrows.name = 'Arrows'
             arrowHelpers.forEach((arrow) => {arrows.add(arrow);});
-            root.add(arrows)
+            cam.add(arrows)
 
         }
             
@@ -190,9 +195,10 @@ export class Animation{
         this.tweens = tweens;
     }
 
-    start() {
+    start(id) {
         this.onStart()
         if(!this.playing){
+            this.playId = id;
             this.setTweens(this);
             this.tweens.forEach((tween) => {
                 tween.start();

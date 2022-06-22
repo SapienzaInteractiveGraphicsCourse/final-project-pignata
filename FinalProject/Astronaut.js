@@ -10,6 +10,8 @@ export class Astronaut extends Player {
     dY = 0.0;                                       // Increment of Y Angle Rotation
     gravity = false;    
 	moving = false;
+    turning = false;
+    jumping = false;
 
 	constructor(model) {
 		super(model)
@@ -46,70 +48,75 @@ export class Astronaut extends Player {
 					}
                 break;
                 case "KeyA":
+                    if(this.animations.Reset.playing) this.animations.Reset.stop()
+                    if(this.animations.TurnRight.playing) this.animations.TurnRight.stop()
                     if (this.dY <= 0.0){
                         this.dY = 0.03;
                         this.animations.TurnLeft.start();
+                        this.turning = true
                     }
-                break;
+                    break;
                 case "KeyD":
+                    if(this.animations.Reset.playing) this.animations.Reset.stop()
                     if (this.dY >= 0.0){
-                        this.dY = -0.03;
                         this.animations.TurnRight.start();
+                        this.turning = true
+                        this.dY = -0.03;
                     }
-                break;
+                    break;
                 case "KeyS":
                     this.animations.TurnBack.start();
+                    this.turning = true
                     // this.fw = this.dirX.applyAxisAngle(this.dirY, 3.1415)
                 	break;
                 case "KeyJ":
 					clipName = (this.gravity) ? 'Jump' : 'nJump'
-                    if (this.animations.Walk.playing) {
-						const walk = this.animations.Walk
+                    let walk;
+                    if (this.moving) {
+                        const walkClipName = (this.gravity) ? 'Run' : 'Walk'
+						walk = this.animations[walkClipName]
 						walk.stop()
-						const moving = this.moving
-						this.animations[clipName].onComplete = function() {
-							if(moving) walk.start()
-						}
 					}
+                    this.animations[clipName].onComplete = function() {
+                        if(this.moving) walk.start()
+                        this.jumping = false
+                    }
                     this.animations[clipName].start()
+                    this.jumping = true
                 	break;
                 case "KeyR":
-                    this.animations.Reset.playng = false;
                     this.animations.Reset.start();
                 	break;
                 case 'KeyG':
                     this.gravity = !this.gravity;
                     console.log('Gravity: ', this.gravity)
                 	break;
-				case 'Digit9':
-					console.log(this.animations.Crunch)
-					this.animations.Crunch.start()
-					break;
-
+                case 'Digit9':
+                    this.pov()
             }
         });
         window.addEventListener('keyup', (e) => {
-            let clipName
             switch(e.code){
                 case "KeyW":
-                    clipName = (!this.gravity) ? 'Walk':'Run'
-                    // this.animations[clipName].repeat = false;
-                    this.animations[clipName].stop();
-                    // this.reset();
-                    this.animations.Reset.start();
-					this.moving = false;
+                    const clipNames = ['Walk', 'Run']
+                    clipNames.forEach(clipName => {
+                        this.animations[clipName].stop()
+                        this.animations.Reset.start();
+                    })
+                    this.moving = false;
                     this.dX = 0;
                 break;
                 case "KeyA":
-                    this.dY = 0;
                     this.animations.TurnLeft.stop();
+                    this.turning = false;
                     this.animations.Reset.start();
-
+                    this.dY = 0;
                 break;
                 case "KeyD":
-                    this.dY = 0;
                     this.animations.TurnRight.stop();
+                    this.turning = false;
                     this.animations.Reset.start();
+                    this.dY = 0;
                     // this.reset()
                 break;
                 case "KeyS":
@@ -143,10 +150,13 @@ export class Astronaut extends Player {
 			z: this.model.rotation.z,
 		}
 		ship.moveTo(rotationFrame)
+        this.boarding()
+	}
+
+	boarding() {
 		this.animations.MoveTo.frames[1] = [{y: '+2'}]
 		this.animations.MoveTo.delay = [1000]
 		this.animations.Crunch.delay = [1000]
-		// this.animations.TurnBack.concat = this.animations.MoveTo
 		this.animations.CamTransition.concat = [this.animations.MoveTo, this.animations.Crunch]
 		this.animations.TurnBack.start()
 		this.animations.CamTransition.start()
@@ -154,17 +164,17 @@ export class Astronaut extends Player {
 
 	}
 
-	boarding(ship) {
-		/* DEPRECATED */
-		let spherical = new THREE.Spherical().setFromVector3(this.model.getObjectByName('root').position)
-		let spherical2 = new THREE.Spherical().setFromVector3(ship.model.position)
-		const dPhi = spherical2.phi - spherical.phi
-		console.log('dPhi : ', dPhi)
-		this.animations.MoveTo.frames[0] = [{x: spherical2.phi}]
-		this.animations.MoveTo.frames[1] = [{y: 10.56}]
-		this.animations.MoveTo.start()
-		this.dirY = this.dirY.applyAxisAngle(this.dirX, dPhi)	
-	}
+    pov(){
+        const cam = this.model.getObjectByName('PlayerCam');
+        cam.fov = 80
+        // this.model.getObjectByName('Head').add(cam)
+        cam.position.set(0,0.5,0.2)
+
+        // this.model.getObjectByName('lightEye').position.set(0,1,1)
+        // this.model.getObjectByName('lightEye').position.set(0,1,-1)
+        // this.model.getObjectByName('lightEye').position.set(0,1,-1)
+                // cam.rotation.x = Math.PI
+    }
 
 	get moving(){
         return this.animations.Walk.playing;
