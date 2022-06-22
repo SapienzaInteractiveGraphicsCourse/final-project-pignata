@@ -2,10 +2,6 @@ import * as THREE from '../resources/three/build/three.module.js';
 import {Player} from "./Player.js"
 
 export class Astronaut extends Player {
-	//  Position Parameters:
-    // dirX = new THREE.Vector3( 1, 0, 0 );
-    // dirY = new THREE.Vector3( 0, 1, 0 );
-    // dirZ = new THREE.Vector3( 0, 0, 1);
     dX = 0.0;                                       // Increment of X Angle Rotation        
     dY = 0.0;                                       // Increment of Y Angle Rotation
     gravity = false;    
@@ -15,6 +11,7 @@ export class Astronaut extends Player {
 
 	constructor(model) {
 		super(model)
+
 //		Set the lightTarget of the astronaut.    
         const lightTarget = new THREE.Object3D();
         lightTarget.name = 'lightTarget'
@@ -72,13 +69,14 @@ export class Astronaut extends Player {
                 case "KeyJ":
 					clipName = (this.gravity) ? 'Jump' : 'nJump'
                     let walk;
-                    if (this.moving) {
+                    const moving = this.moving;
+                    if (moving) {
                         const walkClipName = (this.gravity) ? 'Run' : 'Walk'
 						walk = this.animations[walkClipName]
 						walk.stop()
 					}
                     this.animations[clipName].onComplete = function() {
-                        if(this.moving) walk.start()
+                        if(moving) walk.start()
                         this.jumping = false
                     }
                     this.animations[clipName].start()

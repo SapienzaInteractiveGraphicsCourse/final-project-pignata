@@ -18,8 +18,11 @@ export class Player {
         this.w = new THREE.Vector3(1,0,0);   // Tangent Direction
 
         this.cam = obj.getObjectByName('PlayerCam');
+        const legs = new THREE.Vector3()
+        obj.getObjectByName('Legs').getWorldDirection(legs);
+
         // setArrowHelpers(obj.getObjectByName('root'), this.fw, this.up, this.w)
-        setArrowHelpers(this.cam, this.fw, this.up, this.w)
+        setArrowHelpers(this.cam, this.fw, legs, this.w)
         this.updateAxis()
         console.log('fw: ', this.fw)
         console.log('up: ', this.up)
@@ -50,17 +53,19 @@ export class Player {
             //      Set the Arrow Helpers for directions...
             const origin = new THREE.Vector3( 0.2 , -0.15, -0.5);
             const length = 0.1;
-            const dirX = new THREE.Vector3( 1, 0, 0 );
+            const dirX = new THREE.Vector3( -1, 0, 0 );
             const dirY = new THREE.Vector3( 0, 1, 0 );
-            const dirZ = new THREE.Vector3( 0, 0, 1 );
-                const arrowHelpers = [
-                    new THREE.ArrowHelper(fw, origin, length*0.8, 0xFFFFFF),
-                    // new THREE.ArrowHelper(up, origin, length -0.2, 0x00FF00),
-                    // new THREE.ArrowHelper(w, origin, length-0.2, 0xFF0000),
-                    new THREE.ArrowHelper( dirX, origin, length, 0xFF0000),
-                    new THREE.ArrowHelper( dirY, origin, length, 0x00FF00),
-                    new THREE.ArrowHelper( dirZ, origin, length, 0x0000FF),
-                ];
+            const dirZ = new THREE.Vector3( 0, 0, -1 );
+            const fw_1 = fw.clone()
+            fw_1.z *= -1            
+            fw_1.x *= -1            
+            const arrowHelpers = [
+                new THREE.ArrowHelper(fw, origin, length*0.8, 0xFFFFFF),
+                new THREE.ArrowHelper(fw_1, origin, length*0.8, 0xFFFF00),
+                new THREE.ArrowHelper( dirX, origin, length, 0xFF0000),
+                new THREE.ArrowHelper( dirY, origin, length, 0x00FF00),
+                new THREE.ArrowHelper( dirZ, origin, length, 0x0000FF),
+            ];
             const arrows = new THREE.Group()
             arrows.name = 'Arrows'
             arrowHelpers.forEach((arrow) => {arrows.add(arrow);});
@@ -89,16 +94,21 @@ export class Player {
 
     updateAxis() {
         const root =  this.model.getObjectByName('root')
+        const cam = this.model.getObjectByName('PlayerCam')
+        const dirCam = new THREE.Vector3()
+        cam.getWorldDirection(dirCam)
         root.getWorldDirection( this.fw ) // Returns a vector representing the direction of object's positive z-axis in world space.
         root.getWorldPosition(this.up)
         this.up.normalize()
         this.w.crossVectors(this.fw, this.up)
 
         const arrows = root.getObjectByName("Arrows").children
+        const fw_1 = this.fw.clone()
+        fw_1.z *= -1            
+        fw_1.x *= -1 
         arrows[0].setDirection(this.fw)
-        // arrows[1].setDirection(this.up)
-        // arrows[2].setDirection(this.w)
-    }
+        arrows[1].setDirection(fw_1)
+        }
 
     reset(){
         this.animations.Reset.playing = false;
