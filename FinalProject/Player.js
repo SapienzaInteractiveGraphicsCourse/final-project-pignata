@@ -2,6 +2,7 @@ import * as THREE from '../resources/three/build/three.module.js';
 import {Data} from "./Data.js"
 
 export class Player {
+    static players = [];
     // active = false;
     animations = {};
     playlist = 0;              // number of current animations playing.
@@ -35,7 +36,7 @@ constructor(obj){
             if (this.animations[name].reset) this.animations[name].concat = [this.animations.Reset]
         }
         
-        Animation.args.push(this)
+        Player.players.push(this)
 
         function getChildrenNames(obj, nodes) {
             nodes.push(obj.name)
@@ -89,9 +90,6 @@ constructor(obj){
 
     updateAxis() {
         const root =  this.model.getObjectByName('root')
-        const cam = this.model.getObjectByName('PlayerCam')
-        const dirCam = new THREE.Vector3()
-        cam.getWorldDirection(dirCam)
         root.getWorldDirection( this.fw ) // Returns a vector representing the direction of object's positive z-axis in world space.
         root.getWorldPosition(this.up)
         this.up.normalize()
@@ -103,7 +101,7 @@ constructor(obj){
         fw_1.x *= -1 
         arrows[0].setDirection(this.fw)
         arrows[1].setDirection(fw_1)
-        }
+    }
 
     reset(){
         this.animations.Reset.playing = false;
@@ -144,7 +142,6 @@ export class Animation{
     group = new TWEEN.Group();
     tweens = [];
     next = null;
-    static args = [];
     constructor(name, joints, frames, periods, delay, repeat, reset) {
         this.playing = false;
         this.name = name;

@@ -1,12 +1,10 @@
 import * as THREE from '../resources/three/build/three.module.js';
-import { OrbitControls } from '../resources/three/examples/jsm/controls/OrbitControls.js';
-import {GLTFLoader} from '../resources/three/examples/jsm/loaders/GLTFLoader.js';
+// import { OrbitControls } from '../resources/three/examples/jsm/controls/OrbitControls.js';
+// import {GLTFLoader} from '../resources/three/examples/jsm/loaders/GLTFLoader.js';
 import {GUI} from "../resources/three/examples/jsm/libs/dat.gui.module.js"
-import {TWEEN} from "../resources/three/examples/jsm/libs/tween.module.min.js"
 import {Player} from "./Player.js"
 import { Astronaut } from './Astronaut.js';
 import { SpaceShip } from './SpaceShip.js';
-import {Animation} from './Player.js';
 
 window.onload = loadScene();
 
@@ -56,7 +54,7 @@ const renderer = new THREE.WebGLRenderer({canvas});
 //  SpaceShip:
     // const ship = scene.getObjectByName("SpaceShip");
     const ship = new SpaceShip(scene.getObjectByName("SpaceShip"))
-    console.log(Animation.args)
+    console.log(Player.players)
     // const spherical = new
     // ship.position.setF
 
@@ -95,8 +93,8 @@ const renderer = new THREE.WebGLRenderer({canvas});
 				break;
 
                 case 'Digit8':
-                    Animation.args[0].root.position.set(0,0,0)
-                    Animation.args[1].root.add(Animation.args[0].model)
+                    Player.players[0].root.position.set(0,0,0)
+                    Player.players[1].root.add(Player.players[0].model)
             }
         })
         
@@ -138,7 +136,6 @@ const renderer = new THREE.WebGLRenderer({canvas});
 
 //      Camera Controls:     
         const camFolder = gui.addFolder('PlayerCam');
-        console.log(camera.position)
         camFolder.add(camera, 'fov', 30, 90);
         camFolder.add(camera.position, 'y', 0, 10);
         camFolder.add(camera.position, 'z', -5, 5);
