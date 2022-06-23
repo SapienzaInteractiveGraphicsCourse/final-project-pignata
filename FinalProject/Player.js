@@ -34,6 +34,8 @@ constructor(obj){
             this.animations[name] = new Animation(name, joints, clip.frames, clip.periods, clip.delay, clip.repeat, clip.reset);
             if (this.animations[name].reset) this.animations[name].concat = [this.animations.Reset]
         }
+        
+        Animation.args.push(this)
 
         function getChildrenNames(obj, nodes) {
             nodes.push(obj.name)
@@ -73,7 +75,7 @@ constructor(obj){
 //      Compute Animation Update:
         for (const [name, clip] of Object.entries(this.animations)) {
             if (clip.completed){
-                console.log(clip.name)
+                // console.log(clip.name)
                 //clip.setTweens();
                 if(clip.reset){
                     // this.reset();
@@ -142,6 +144,7 @@ export class Animation{
     group = new TWEEN.Group();
     tweens = [];
     next = null;
+    static args = [];
     constructor(name, joints, frames, periods, delay, repeat, reset) {
         this.playing = false;
         this.name = name;
@@ -163,7 +166,6 @@ export class Animation{
                 const tween = new TWEEN.Tween(this.joints[i],this.group).to(this.frames[i][j],this.periods[j]);
                 if(this.delay != false && this.delay != undefined){
                     if (this.delay[j] != false && this.delay[j] != undefined){
-                        console.log(this.delay[j])
                         tween.delay(this.delay[j]);
                     }
                 }
@@ -177,9 +179,6 @@ export class Animation{
                 currentTween = tween;
             }
             if (this.repeat) {
-                currentTween.onComplete(function() {
-                    console.log('AMALA');
-                })
                 const tween = new TWEEN.Tween(this.joints[i],this.group).to(this.frames[i][0],this.periods[0])
                 currentTween.chain(tween,firstTween)
                 //currentTween.chain(firstTween);
@@ -198,10 +197,10 @@ export class Animation{
         this.tweens = tweens;
     }
 
-    start(id) {
+    start() {
         this.onStart()
         if(!this.playing){
-            this.playId = id;
+            console.log(this.name)
             this.setTweens(this);
             this.tweens.forEach((tween) => {
                 tween.start();
@@ -225,6 +224,7 @@ export class Animation{
             this.onComplete()
             if (this.next != null){
                 this.next.forEach(animation => {animation.start()})
+                this.next = null;
             } 
             this.stop();
         }
@@ -232,6 +232,7 @@ export class Animation{
 
     onComplete(){}
     onStart(){}
+    loadParams(param) { this.params.push(param)}
     onUpdate(){}
 
     set concat(animations) {

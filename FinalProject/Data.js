@@ -24,8 +24,8 @@ export const Data = {
                     [{x: 0, y: 0}]
                  ],
 
-                periods: [500],
-                delay: false,
+                periods: [300],
+                delay: [10],
                 repeat: false,
                 reset: false,
             },
@@ -171,8 +171,8 @@ export const Data = {
             'TurnRight': {
                 joints: ['root','leftAnkle','rightAnkle', 'upTronco'],
                 attributes: ['rotation', 'rotation', 'rotation', 'rotation'],
-                frames: [[{y: '-0.0'}],[{x: '-0.6'}],[{x: '-0.6'}],[{y: '-0.4'}]],
-                // frames: [[{y: '-0.0'}],[{x: '-0.6'}],[{x: '-0.6'}],[{y: '-0.4'}]],
+                frames: [[{y: '+0'}],[{x: -0.6}],[{x: -0.6}],[{y: -0.4}]],
+                // frames: [[{y: '+0.0'}],[{x: '-0.6'}],[{x: '-0.6'}],[{y: '-0.4'}]],
                 periods: [200],
                 delay: false,
                 repeat: false,
@@ -181,7 +181,8 @@ export const Data = {
             'TurnLeft': {
                 joints: ['root','leftAnkle','rightAnkle', 'upTronco'],
                 attributes: ['rotation', 'rotation', 'rotation', 'rotation'],
-                frames: [[{y: '+0.0'}],[{x: '+0.6'}],[{x: '+0.6'}],[{y: '+0.4'}]],
+                frames: [[{y: '+0'}],[{x: 0.6}],[{x: 0.6}],[{y: 0.4}]],
+                // frames: [[{y: '+0.0'}],[{x: '+0.6'}],[{x: '+0.6'}],[{y: '+0.4'}]],
                 periods: [200],
                 delay: false,
                 repeat: false,

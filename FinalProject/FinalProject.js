@@ -6,6 +6,7 @@ import {TWEEN} from "../resources/three/examples/jsm/libs/tween.module.min.js"
 import {Player} from "./Player.js"
 import { Astronaut } from './Astronaut.js';
 import { SpaceShip } from './SpaceShip.js';
+import {Animation} from './Player.js';
 
 window.onload = loadScene();
 
@@ -55,6 +56,7 @@ const renderer = new THREE.WebGLRenderer({canvas});
 //  SpaceShip:
     // const ship = scene.getObjectByName("SpaceShip");
     const ship = new SpaceShip(scene.getObjectByName("SpaceShip"))
+    console.log(Animation.args)
     // const spherical = new
     // ship.position.setF
 
@@ -92,9 +94,9 @@ const renderer = new THREE.WebGLRenderer({canvas});
 					player.boarding(ship)
 				break;
 
-                case 'Digit9':
-                    player.root.position.set(0,0,0)
-                    ship.root.add(player.model)
+                case 'Digit8':
+                    Animation.args[0].root.position.set(0,0,0)
+                    Animation.args[1].root.add(Animation.args[0].model)
             }
         })
         

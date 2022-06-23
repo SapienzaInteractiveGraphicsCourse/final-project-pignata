@@ -1,5 +1,5 @@
 import * as THREE from '../resources/three/build/three.module.js';
-import {Player} from "./Player.js";
+import {Player, Animation} from "./Player.js";
 
 
 export class SpaceShip extends Player {
@@ -27,7 +27,6 @@ export class SpaceShip extends Player {
 
 		//  	Input Configuration:
 		window.addEventListener('keydown', (e) => {
-			console.log(this.active)
 			if (this.active) {
 				switch(e.code) {
 					case "ShiftRight": this.ssEngine();               // Shift

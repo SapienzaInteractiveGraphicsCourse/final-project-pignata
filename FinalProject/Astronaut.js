@@ -1,5 +1,5 @@
 import * as THREE from '../resources/three/build/three.module.js';
-import {Player} from "./Player.js"
+import {Player, Animation} from "./Player.js"
 
 export class Astronaut extends Player {
     dX = 0.0;                                       // Increment of X Angle Rotation        
@@ -41,12 +41,12 @@ export class Astronaut extends Player {
                         if (!this.moving){
                             this.dX = +0.005;
                             this.animations[clipName].repeat = true;
-                            this.animations[clipName].start();
+                            if(!this.jumping) this.animations[clipName].start();
                             this.moving = true;
                         }
                     break;
                     case "KeyA":
-                        if(this.animations.Reset.playing) this.animations.Reset.stop()
+                        // if(this.animations.Reset.playing) this.animations.Reset.stop()
                         if(this.animations.TurnRight.playing) this.animations.TurnRight.stop()
                         if (this.dY <= 0.0){
                             this.dY = 0.03;
@@ -55,7 +55,8 @@ export class Astronaut extends Player {
                         }
                         break;
                     case "KeyD":
-                        if(this.animations.Reset.playing) this.animations.Reset.stop()
+                        // if(this.animations.Reset.playing) this.animations.Reset.stop()
+                        if(this.animations.TurnLeft.playing) this.animations.TurnLeft.stop()
                         if (this.dY >= 0.0){
                             this.animations.TurnRight.start();
                             this.turning = true
@@ -77,8 +78,15 @@ export class Astronaut extends Player {
                             walk.stop()
                         }
                         this.animations[clipName].onComplete = function() {
-                            if(moving) walk.start()
-                            this.jumping = false
+                            const astronaut = Animation.args[0]                  
+                            if(astronaut.moving){
+                                const walkClipName = (astronaut.gravity) ? 'Run' : 'Walk'
+                                astronaut.animations[walkClipName].start()
+                            } 
+                            if(astronaut.turning) {
+                            }
+                            astronaut.jumping = false;
+                            // astronaut.animations.Reset();
                         }
                         this.animations[clipName].start()
                         this.jumping = true
@@ -102,22 +110,26 @@ export class Astronaut extends Player {
                         const clipNames = ['Walk', 'Run']
                         clipNames.forEach(clipName => {
                             this.animations[clipName].stop()
-                            this.animations.Reset.start();
                         })
                         this.moving = false;
                         this.dX = 0;
+                        if(!this.jumping) this.animations.Reset.start();
+                        if(this.dY >0) this.animations.TurnRight.start();
                     break;
                     case "KeyA":
-                        this.animations.TurnLeft.stop();
+                        if(this.animations.TurnLeft.playing) this.animations.TurnLeft.stop();
+                        if(!this.animations.TurnRight.playing) this.animations.Reset.start();
                         this.turning = false;
-                        this.animations.Reset.start();
                         this.dY = 0;
+                        // this.animations.TurnRight.start()
                     break;
                     case "KeyD":
                         this.animations.TurnRight.stop();
+                        if(!this.animations.TurnLeft.playing) this.animations.Reset.start();
                         this.turning = false;
-                        this.animations.Reset.start();
                         this.dY = 0;
+
+                        // this.animations.TurnLeft.start()
                         // this.reset()
                     break;
                     case "KeyS":
@@ -159,24 +171,22 @@ export class Astronaut extends Player {
 		this.animations.MoveTo.frames[1] = [{y: '+2'}]
 		this.animations.MoveTo.delay = [1000]
 		this.animations.Crunch.delay = [1000]
-        const astronaut = this.model
-        this.animations.Crunch.onComplete = function() {
-            console.log('ao')
-            astronaut.getObjectByName('root').position.set(0,0,0)
-            astronaut.rotation.setFromVector3(ship.model.rotation)
-            ship.model.getObjectByName('root').add(astronaut)
-            // astronaut.rotation.set(0,0,0)
-            console.log(astronaut.getObjectByName('root').getWorldPosition())
-            console.log(ship.model.getObjectByName('root').getWorldPosition())
-            console.log(ship.model.getObjectByName('root').rotation)
-            console.log(ship.model.rotation)
-            console.log(ship.model)
+        // const astronaut = this.model
+        this.animations.MoveTo.onComplete = function() {
+            const astronaut = Animation.args[0];
+            const ship = Animation.args[1];
+            astronaut.root.position.set(0,0,0)
+            ship.root.add(astronaut.model)
         }
 		this.animations.CamTransition.concat = [this.animations.MoveTo, this.animations.Crunch]
 		this.animations.TurnBack.start()
 		this.animations.CamTransition.start()
         this.active = false
 	}
+
+    pilot(ship) {
+
+    }
 
     pov(){
         const cam = this.model.getObjectByName('PlayerCam');
