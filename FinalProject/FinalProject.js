@@ -50,6 +50,7 @@ const renderer = new THREE.WebGLRenderer({canvas});
 //  Set the Astronaut as Player:
     const astronaut = scene.getObjectByName("Astronaut");
     const player = new Astronaut(astronaut);
+    player.active = true;
 
 //  SpaceShip:
     // const ship = scene.getObjectByName("SpaceShip");
@@ -82,7 +83,7 @@ const renderer = new THREE.WebGLRenderer({canvas});
                     // dirX = dirX.negate()
                 break;
                 case('KeyC'):
-                    camera = ship.model.getObjectByName('shipCam')
+                    camera = ship.model.getObjectByName('PlayerCam')
                 break;
                 case 'Space':
 					player.callSpaceShip(ship)
@@ -90,6 +91,10 @@ const renderer = new THREE.WebGLRenderer({canvas});
                 case 'KeyP':
 					player.boarding(ship)
 				break;
+
+                case 'Digit9':
+                    player.root.position.set(0,0,0)
+                    ship.root.add(player.model)
             }
         })
         

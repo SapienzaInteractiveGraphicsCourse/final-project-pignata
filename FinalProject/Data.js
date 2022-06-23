@@ -271,6 +271,9 @@ export const Data = {
     },
     'SpaceShip': {
         animations: {
+            // 'Pitch': {
+
+            // },
             'Boarding': {
                 joints: ['root', 'leg1', 'leg2', 'leg3','leg4'],
                 attributes: ['position', 'position', 'position', 'position', 'position'],

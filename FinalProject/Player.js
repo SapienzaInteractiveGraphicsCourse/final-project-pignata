@@ -5,29 +5,24 @@ export class Player {
     // active = false;
     animations = {};
     playlist = 0;              // number of current animations playing.
+    active = false;
 
 
 // //  Position Parameters:
-    constructor(obj){
-        this.model = obj;
+constructor(obj){
         this.name = obj.name;
+        this.model = obj;
+        this.root  = obj.getObjectByName('root')
         this.nodes = [];
-        getChildrenNames(obj, this.nodes)
+        getChildrenNames(obj, this.nodes);
         this.fw = new THREE.Vector3(0,0,1);  // Forward Direction
         this.up = new THREE.Vector3(0,1,0);   // Up Direction
         this.w = new THREE.Vector3(1,0,0);   // Tangent Direction
-
         this.cam = obj.getObjectByName('PlayerCam');
-        const legs = new THREE.Vector3()
-        obj.getObjectByName('Legs').getWorldDirection(legs);
 
         // setArrowHelpers(obj.getObjectByName('root'), this.fw, this.up, this.w)
-        setArrowHelpers(this.cam, this.fw, legs, this.w)
+        setArrowHelpers(this.cam, this.fw, this.up, this.w)
         this.updateAxis()
-        console.log('fw: ', this.fw)
-        console.log('up: ', this.up)
-        console.log('w:',  this.w)
- 
         console.log("New Player: ", this.name)
 
 //      COMPUTE ANIMATIONS:
@@ -50,7 +45,7 @@ export class Player {
         }
 
         function setArrowHelpers(cam, fw , up, w){
-            //      Set the Arrow Helpers for directions...
+//      Set the Arrow Helpers for directions...
             const origin = new THREE.Vector3( 0.2 , -0.15, -0.5);
             const length = 0.1;
             const dirX = new THREE.Vector3( -1, 0, 0 );
@@ -70,7 +65,6 @@ export class Player {
             arrows.name = 'Arrows'
             arrowHelpers.forEach((arrow) => {arrows.add(arrow);});
             cam.add(arrows)
-
         }
             
     }
@@ -82,7 +76,6 @@ export class Player {
                 console.log(clip.name)
                 //clip.setTweens();
                 if(clip.reset){
-                    console.log('reset');
                     // this.reset();
                 }
             clip.completed = false;

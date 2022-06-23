@@ -6,12 +6,11 @@ export class SpaceShip extends Player {
 	constructor(model) {
 		model.getObjectByName('shipCam').name = 'PlayerCam'
 		super(model)
-		model.getObjectByName('Arrows').visible = false;
+		model.getObjectByName('Arrows').visible = this.active;
 		console.log(this.animations.Doors)
+		this.engine = false
 		this.land = true;
 		this.inAtmosphere = true;
-		console.log(this.nodes)
-
 		this.model.getObjectByName('lightTarget').position.set(0,-1,0)
 		model.getObjectByName("SpotLight").target = model.getObjectByName('lightTarget');
 		// this.alignToZenith()
@@ -20,35 +19,51 @@ export class SpaceShip extends Player {
 			model.getObjectByName('Legs').visible = !model.getObjectByName('Legs').visible		
 		}
 
+		this.engine = false;
+		this.gear = 4,
+		this.speed = [-0.2, -0.1, -0.05, -0.01, 0, 0.01, 0.05, 0.1, 0.2]
+		this.yaw = 0;
+		this.pitch = 0;
+
 		//  	Input Configuration:
 		window.addEventListener('keydown', (e) => {
-			switch(e.code) {
-				case 'KeyB':
-					this.animations.Boarding.start();
-				break;
-				case 'KeyF':
-					this.model.position.set(0,12, 0);
-					this.alignToZenith()
+			console.log(this.active)
+			if (this.active) {
+				switch(e.code) {
+					case "ShiftRight": this.ssEngine();               // Shift
 					break;
-				case 'KeyM':
-					this.animations.MoveTo.start();	
+					case "ArrowUp": this.shiftUp();                // Up Arrow
 					break;
-				case 'KeyO':
-					// this.animations.Doors.start();
-					this.model.getObjectByName('Door1').rotation.z = Math.PI/2;
-					this.model.getObjectByName('Door2').rotation.z =   - Math.PI/2;
-			}
+					case "ArrowDown": this.shiftDown();              // Down
+					case "KeyW":                              
+						if (this.engine && this.pitching > -0.02) this.pitch = -0.02;
+					break;
+					case "KeyS":                                
+						if (this.engine && this.pitching < 0.02) this.pitch = 0.02;
+					break;
+					case "KeyA":                                
+						if (this.engine && this.rolling < 0.05) this.yaw = 0.05;
+					break;
+					case "KeyD":                                // D
+						if (this.engine && this.rolling > -0.05) this.yaw = -0.05;
+					break;
+					// case "ArrowLeft": this.dodge(-90);
+					// break;
+					// case "ArrowRight": this.dodge(90);
+					// break;
+					// case "KeyQ": this.land();
+				}
+			} 
 		})
 
 	}
 	update() {
-		super.update();
-		// if (this.model.position.distanceTo(new THREE.Vector3(0,0,0)) < 13) {
-		// 	this.alignToZenith()
-		// }
-		if (this.isMoving) {
-			// this.alignToZenith()
+		if (this.engine) {
+			if(this.yaw != 0) this.root.rotateOnWorldAxis(this.up, this.yaw)
+			if(this.pitch != 0) this.root.rotateOnWorldAxis(this.w, this.pitch)
+			this.root.translateZ(this.speed[this.gear])
 		}
+		super.update();
 	}
 
 	inAtmosphere(position) {
@@ -59,95 +74,35 @@ export class SpaceShip extends Player {
 		else return false
 	}
 
-	// moveTo(position) {
-	// 	console.log(position)
-	// 	// const animation = new Animation(
-	// 	// 	'moveTo',
-	// 	// 	[this.model.position],
-	// 	// 	[{x: position.x, y: position.y, z: position.z}],
-	// 	// 	[1000],
-	// 	// 	false,
-	// 	// 	[300],
-	// 	// 	false
-	// 	// )
-	// 	// animation.start()
-	// 	// this.animations.Boarding.start();
-	// 	this.animations.MoveTo.frames[0][0] = {
-	// 		x: position.x,
-	// 		y: position.y,
-	// 		z: position.z
-	// 	}
-	// 	if (this.inAtmosphere(position)) {
-	// 		console.log(this.model)
-	// 		const p = position.normalize()
-	// 		console.log('desired position up: ', p)
-	// 		console.log('current up direction: ', this.y)
-	// 		const angle = this.y.angleTo(p)
-	// 		console.log('offset angle: ', angle)
-	// 		const w = new THREE.Vector3().crossVectors(this.y, p).normalize()
-	// 		console.log('rotation axis: ', w)
-	// 		this.model.position.set(position.x, position.y, position.z)
-	// 		// this.model.rotateOnAxis(w, angle)
-	// 		console.log('final rotation coords:', this.model.rotation )
-	// 		this.animations.MoveTo.frames[0][1] = {
-	// 			x: this.model.rotation.x,
-	// 			y: this.model.rotation.y,
-	// 			z: this.model.rotation.z,
-	// 		}
-	// 		// this.model.rotateOnAxis(w, -angle)
-	// 		console.log('current rotation coords:', this.model.rotation)
-	// 		this.y = p;
-	// 		console.log('new y: ', this.y)
-	// 	}
-		// this.animations.MoveTo.start();
-	// }
-	// moveTo(position, rotation) {
-	// 	const p = position.clone().normalize()
-	// 	this.y = p;
+	ssEngine() {
+		this.engine = !this.engine;
+		console.log("Engine: ",this.engine);
+		this.gear = 4;
+		// this.lights.children[1].intensity = this.engine;
+	}
 
-	// 	this.animations.MoveTo.frames[0][0] = {
-	// 		x: position.x,
-	// 		y: position.y,
-	// 		z: position.z
-	// 	}
-		
-	// 	const dx = rotation.x-this.model.rotation.x
-	// 	const dy = rotation.y-this.model.rotation.y
-	// 	const dz = rotation.z-this.model.rotation.z
+	shiftUp(){
+		if (this.engine && this.gear < 8 && !this.landed) {
+				this.gear +=1;
+				// this.lights.children[1].intensity += (2)*Math.sign(this.speed[this.gear]);
+		}
+	}
 
-	// 	const dX = String(dx.toFixed(2))
-	// 	const dY = String(dy.toFixed(2))
-	// 	const dZ = String(dz.toFixed(2))
-
-		
-	// 	this.animations.MoveTo.frames[0][1] = {
-	// 		x: rotation.x,
-	// 		y: rotation.y,
-	// 		z: rotation.z,
-	// 	}
-
-	// 		console.log('Euler x: ', this.model.rotation.x, rotation.x)
-	// 		console.log('Euler y: ', this.model.rotation.y, rotation.y)
-	// 		console.log('Euler z: ', this.model.rotation.z, rotation.z)
-
-	// 	if (this.landing){
-	// 		// this.animations.Boarding.start()
-	// 		// this.landing = false
-	// 	}
-	// 	// this.model.getObjectByName('lightTarget').position.set(0,-2,0)
-	// 	this.animations.MoveTo.start()
-	// }
-
-
-	// moveTo(position, rotation) {
-	// 	console.log('Euler x: ', this.model.rotation.x, rotation.x, rotation.x-this.model.rotation.x)
-	// 	console.log('Euler y: ', this.model.rotation.y, rotation.y, rotation.y-this.model.rotation.y)
-	// 	console.log('Euler z: ', this.model.rotation.z, rotation.z, rotation.z-this.model.rotation.z)
-	// 	this.model.position.set(position.x, position.y, position.z)
-	// 	this.model.rotation.set(rotation.x, rotation.y, rotation.z)
-	// }
+	shiftDown(){
+		if (this.engine && this.gear > 0 && !this.landed) {
+				this.gear -=1;
+				// this.lights.children[1].intensity -= 2*Math.sign(this.speed[this.gear]);
+		}
+	}
+	turn(theta){
+			if (!this.landed) this.root.rotateY(theta);
+	}
+	pitch(phi){
+			if (!this.landed) this.root.rotateX(phi);
+	}
 
 	moveTo(rotationFrame) {
+		if (!this.active) this.active = true
 		const dx = rotationFrame.x - this.model.rotation.x;
 		const dy = rotationFrame.y - this.model.rotation.y;
 		const dz = rotationFrame.z - this.model.rotation.z;
@@ -181,6 +136,7 @@ export class SpaceShip extends Player {
 		else {
 			this.animations.MoveTo.start()
 		}
+		this.active = true
 	}
 
 }
