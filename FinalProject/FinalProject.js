@@ -12,7 +12,7 @@ window.onload = loadScene();
 function loadScene(){
     THREE.Cache.enabled = false;
     const loader = new THREE.ObjectLoader();
-    loader.load(('scenes/scene5.json'), function (scene) {init(scene)});
+    loader.load(('scenes/scene6.json'), function (scene) {init(scene)});
     //loader.load(('scenes/PlanetSystem.json'), function (scene) {init(scene)});
     //loader.load(('scenes/CharacterAnimation.json'), function (scene) {init(scene)});
 
