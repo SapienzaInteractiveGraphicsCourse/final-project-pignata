@@ -26,6 +26,7 @@ export class Astronaut extends Player {
 		}
 
 		this.animations.TurnBack.onComplete = function() {
+            console.log(Player.players[0].root.rotation)
 			animations.Run.stop()
 			// animations.Run.delay = false
 			animations.Reset.start()
@@ -175,8 +176,21 @@ export class Astronaut extends Player {
         this.animations.MoveTo.onComplete = function() {
             const astronaut = Player.players[0];
             const ship = Player.players[1];
+            console.log(ship.model.rotation)
             astronaut.root.position.set(0,0,0)
+            astronaut.model.rotation.set(0,0,0)
+            // ship.root.rotation.set(
+            //     ship.model.rotation.x,
+            //     ship.model.rotation.y,
+            //     ship.model.rotation.z,
+            // )
             ship.root.add(astronaut.model)
+            console.log(
+                "Ship Model ", ship.model.rotation,
+                "\nShip Root ", ship.root.rotation,
+                "\nAM " , astronaut.model.rotation,
+                "\nAR", astronaut.root.rotation,   
+                )
             ship.active = true
             ship.model.getObjectByName('lightTarget').position.set(0,0,-1)
         }

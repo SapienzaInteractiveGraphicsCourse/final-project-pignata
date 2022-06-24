@@ -4,6 +4,7 @@ import {Player, Animation} from "./Player.js";
 
 export class SpaceShip extends Player {
 	constructor(model) {
+		model.rotation.set(Math.PI*0.1, 0, Math.PI*0.1)
 		model.getObjectByName('shipCam').name = 'PlayerCam'
 		super(model)
 		model.getObjectByName('Arrows').visible = this.active;
@@ -37,10 +38,10 @@ export class SpaceShip extends Player {
 					case "ArrowDown": this.shiftDown();              // Down
 					break;
 					case "KeyW":                              
-						if (this.engine && this.pitch < 0.02) this.pitch = 0.02;
+						if (this.engine && this.pitch < 0.05) this.pitch = 0.05;
 					break;
 					case "KeyS":                                
-						if (this.engine && this.pitch > -0.02) this.pitch = -0.02;
+						if (this.engine && this.pitch > -0.05) this.pitch = -0.05;
 					break;
 					case "KeyA":                                
 						if (this.engine && this.yaw < 0.05) this.yaw = 0.05;
@@ -85,11 +86,14 @@ export class SpaceShip extends Player {
 	update() {
 		if (this.engine) {
 			if(this.engine) this.root.translateZ(this.speed[this.gear]) 
-			// if(this.yaw != 0) this.root.rotateOnAxis(new THREE.Vector3(0,1,0), this.yaw)
-			if(this.yaw != 0) this.root.rotateOnWorldAxis(this.up, this.yaw)
-			// if(this.pitch != 0) this.root.rotateOnAxis(new THREE.Vector3(0,0,1), this.pitch)
-			if(this.pitch != 0) this.root.rotateOnWorldAxis(this.w, this.pitch)
 			// this.root.translateOnAxis(this.fw, this.speed[this.gear])
+			// this.root.translateOnAxis(this.root.worldToLocal(this.fw), this.speed[this.gear])
+			// if(this.yaw != 0) this.root.rotateOnAxis(new THREE.Vector3(0,1,0), this.yaw)
+			// if(this.yaw != 0) this.root.rotateOnWorldAxis(this.up, this.yaw)
+			if(this.yaw != 0) this.root.rotateY(this.yaw)
+			// if(this.pitch != 0) this.root.rotateOnAxis(new THREE.Vector3(0,0,1), this.pitch)
+			// if(this.pitch != 0) this.root.rotateOnWorldAxis(this.w, this.pitch)
+			if(this.pitch != 0) this.root.rotateX(this.pitch)
 		}
 		super.update();
 	}
