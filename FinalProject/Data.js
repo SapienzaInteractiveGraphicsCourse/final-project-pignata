@@ -1,27 +1,43 @@
-const c = Math.PI/180;
-const r = 10.56;            //Planet Radius; 
+const c = Math.PI/180;      // Conversion deg -> rad
+const r = 10.56;            // Planet Radius = 10 + legs = 0.56; 
 
 export const Data = {
+/* HOW TO READ THE DATA:
+Data = {
+    'Character Name': {
+        animations: {
+            'Animation Name': {
+                joints: List of joint names. A joint is the THREE.js Object/Group to animate.
+                attributes: For each joint is associated an attribute to update during the animation by the tweening engine (rotation or position).
+                frames: For each joint there is a list o keyframes. A keyframe is a dictionary with parameters (x,y,z) as keys and the value to set the respective tween, i.e, the final value or the increment that the tweening engine use to update the parameters (key). 
+                periods: durat
+            }
+        }
+    }
+}
+
+
+*/
     'Astronaut': {
         animations: {
             'Reset': {
                 joints: ['root', 'root', 'Core', 'upTronco', 'rightHip', 'rightKnee', 'rightAnkle', 'leftHip', 'leftKnee', 'leftAnkle', 'rightShoulder', 'rightElbow', 'leftShoulder', 'leftElbow'],
                 attributes: ['position', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation'],
                 frames: [
-                    [{y: r}],
-                    [{y: 0}],
-                    [{x: 10*c}],
-                    [{y: 0}],
-                    [{x: 0}],
-                    [{x: 0}],
-                    [{x: 0}],
-                    [{x: 0}],
-                    [{x: 0}],
-                    [{x: 0}],
-                    [{x: 0}],
-                    [{x: 0}],
-                    [{x: 0, y: 0}],
-                    [{x: 0, y: 0}]
+                    [{y: r}],           // root.position
+                    [{y: 0}],           // root.rotation
+                    [{x: 0}],           // Core
+                    [{x:5*c, y: 0}],    // upTronco
+                    [{x: -5*c}],        // rightHip
+                    [{x: 5*c}],         // rightKnee 
+                    [{x: 0, y: 0}],     // rightAnkle
+                    [{x: -5*c}],        // leftHip
+                    [{x: 5*c}],         // leftKnee
+                    [{x: 0, y: 0}],     // leftAnkle
+                    [{x: 0}],           // rightShoulder
+                    [{x: -10*c}],       // rightElbow
+                    [{x: 0}],           // leftShoulder         
+                    [{x: -10*c}]        // leftElbow
                  ],
 
                 periods: [300],
@@ -57,31 +73,31 @@ export const Data = {
 
             },
 
-            'nWalk': {  // Walk Animation With NO Gravity. (TODO: Diminuire il movimento delle braccia, viceversa implementare running ed inclinare leggermente il Torso in avanti)
-                joints: ['root', 'rightHip', 'rightKnee', 'rightAnkle', 'leftHip', 'leftKnee', 'leftAnkle', 'rightShoulder', 'rightElbow', 'leftShoulder', 'leftElbow'],
-                attributes: ['position', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation'],
-                frames : [
-                    [ {y: r - 0.1 }, {y: r - 0.05}, {y: r}, {y: r+0.05},       {y: r - 0.1}, {y: r-0.05}, {y: r}, {y: r+0.05}],       // Height
+            // 'nWalk': {  // Walk Animation With NO Gravity. (TODO: Diminuire il movimento delle braccia, viceversa implementare running ed inclinare leggermente il Torso in avanti)
+            //     joints: ['root', 'rightHip', 'rightKnee', 'rightAnkle', 'leftHip', 'leftKnee', 'leftAnkle', 'rightShoulder', 'rightElbow', 'leftShoulder', 'leftElbow'],
+            //     attributes: ['position', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation'],
+            //     frames : [
+            //         [ {y: r - 0.1 }, {y: r - 0.05}, {y: r}, {y: r+0.05},       {y: r - 0.1}, {y: r-0.05}, {y: r}, {y: r+0.05}],       // Height
 
-                    [ {x: 15*c}, {x: 0*c}, {x: -30*c}, {x: -60*c},      {x: -35*c}, {x: -30*c}, {x: 5*c}, {x: 15*c} ],      // rightHip
-                    [ {x: 30*c}, {x: 90*c}, {x: 120*c}, {x: 90*c},      {x: 0*c}, {x: 45*c}, {x: 5*c}, {x: 0*c} ],          // rightKnee
-                    [ {y: 40*c}, {y: 0*c}, {y: 30*c}, {y: 0*c},         {y: 0*c}, {y: 15*c}, {y: 10*c}, {y: -15*c} ],       // rightAnkle
+            //         [ {x: 15*c}, {x: 0*c}, {x: -30*c}, {x: -60*c},      {x: -35*c}, {x: -30*c}, {x: 5*c}, {x: 15*c} ],      // rightHip
+            //         [ {x: 30*c}, {x: 90*c}, {x: 120*c}, {x: 90*c},      {x: 0*c}, {x: 45*c}, {x: 5*c}, {x: 0*c} ],          // rightKnee
+            //         [ {y: 40*c}, {y: 0*c}, {y: 30*c}, {y: 0*c},         {y: 0*c}, {y: 15*c}, {y: 10*c}, {y: -15*c} ],       // rightAnkle
 
-                    [ {x: -35*c}, {x: -30*c}, {x: 5*c}, {x: 15*c},      {x: 15*c}, {x: 0*c}, {x: -30*c}, {x: -60*c} ],      // leftHip
-                    [ {x: 0*c}, {x: 45*c}, {x: 5*c}, {x: 0*c},          {x: 30*c}, {x: 90*c}, {x: 120*c}, {x: 90*c} ],      // leftKnee
-                    [ {y: 0*c}, {y: 15*c}, {y: 10*c}, {y: -15*c},       {y: 40*c}, {y: 0*c}, {y: 30*c}, {y: 0*c} ],         // leftAnkle
+            //         [ {x: -35*c}, {x: -30*c}, {x: 5*c}, {x: 15*c},      {x: 15*c}, {x: 0*c}, {x: -30*c}, {x: -60*c} ],      // leftHip
+            //         [ {x: 0*c}, {x: 45*c}, {x: 5*c}, {x: 0*c},          {x: 30*c}, {x: 90*c}, {x: 120*c}, {x: 90*c} ],      // leftKnee
+            //         [ {y: 0*c}, {y: 15*c}, {y: 10*c}, {y: -15*c},       {y: 40*c}, {y: 0*c}, {y: 30*c}, {y: 0*c} ],         // leftAnkle
 
-                    [ {x: -45*c}, {x: -15*c}, {x: 15*c}, {x: 45*c},     {x: 15*c}, {x: 0*c}, {x: -30*c}, {x: -45*c} ],       // rightShoulder
-                    [ {x: -90*c}, {x: -90*c}, {x: -75*c}, {x: -75*c},   {x: -45*c}, {x: -45*c}, {x: -90*c}, {x: -90*c} ],   // rightElbow
+            //         [ {x: -45*c}, {x: -15*c}, {x: 15*c}, {x: 45*c},     {x: 15*c}, {x: 0*c}, {x: -30*c}, {x: -45*c} ],       // rightShoulder
+            //         [ {x: -90*c}, {x: -90*c}, {x: -75*c}, {x: -75*c},   {x: -45*c}, {x: -45*c}, {x: -90*c}, {x: -90*c} ],   // rightElbow
 
-                    [ {x: 15*c}, {x: 0*c}, {x: -30*c}, {x: -45*c},      {x: -35*c}, {x: -30*c}, {x: 5*c}, {x: 45*c} ],     // leftShoulder
-                    [ {x: -45*c}, {x: -45*c}, {x: -90*c}, {x: -90*c},   {x: -90*c}, {x: -90*c}, {x: -90*c}, {x: -75*c} ],   // leftElbow
-                ],
-                periods: new Array(8).fill(200),
-                delay: false,
-                repeat: true,
-                reset: true,
-            },
+            //         [ {x: 15*c}, {x: 0*c}, {x: -30*c}, {x: -45*c},      {x: -35*c}, {x: -30*c}, {x: 5*c}, {x: 45*c} ],     // leftShoulder
+            //         [ {x: -45*c}, {x: -45*c}, {x: -90*c}, {x: -90*c},   {x: -90*c}, {x: -90*c}, {x: -90*c}, {x: -75*c} ],   // leftElbow
+            //     ],
+            //     periods: new Array(8).fill(200),
+            //     delay: false,
+            //     repeat: true,
+            //     reset: true,
+            // },
 
             'Run': {  // Walk Animation With NO Gravity.
                 joints: ['root', 'rightHip', 'rightKnee', 'rightAnkle', 'leftHip', 'leftKnee', 'leftAnkle', 'rightShoulder', 'rightElbow', 'leftShoulder', 'leftElbow', 'Core'],
@@ -201,30 +217,30 @@ export const Data = {
                 repeat: false,
                 reset: false,
             },
-            'Boarding': {
-                joints: ['Astronaut', 'root', 'Core', 'upTronco', 'rightHip', 'rightKnee', 'rightAnkle', 'leftHip', 'leftKnee', 'leftAnkle', 'rightShoulder', 'rightElbow', 'leftShoulder', 'leftElbow'],
-                attributes: ['rotation', 'position', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation'],
-                frames: [
-                    [{x: '+0'}, {x:'+0'}, {y: '+3'}],
-                    [{y: '-0.2'}, {y: '+0.2'}],
-                    [{x: 25*c}, {x: 10*c}, {x: 0}],
-                    [{x: -15*c}, {x: 0}, {x: -10*c},],
-                    [{x: -55*c}, {x: 15*c}],
-                    [{x: 80*c}, {x: -15*c}],
-                    [{y: 25*c}, {y: -30*c}],
-                    [{x: -55*c}, {x: 15*c}],
-                    [{x: 80*c}, {x: -15*c}],
-                    [{y: 25*c}, {y: -30*c}],
-                    [{x: -30*c}, {x: -90*c}],
-                    [{x: -90*c, y: -30*c}],
-                    [{x: -30*c}, {x: -90*c}],
-                    [{x: -90*c, y: -30*c}],
-                ],
-                periods: [250, 200],
-                delay: [false, 50],
-                repeat: false,
-                reset: false
-            },
+            // 'Boarding': {
+            //     joints: ['Astronaut', 'root', 'Core', 'upTronco', 'rightHip', 'rightKnee', 'rightAnkle', 'leftHip', 'leftKnee', 'leftAnkle', 'rightShoulder', 'rightElbow', 'leftShoulder', 'leftElbow'],
+            //     attributes: ['rotation', 'position', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation', 'rotation'],
+            //     frames: [
+            //         [{x: '+0'}, {x:'+0'}, {y: '+3'}],
+            //         [{y: '-0.2'}, {y: '+0.2'}],
+            //         [{x: 25*c}, {x: 10*c}, {x: 0}],
+            //         [{x: -15*c}, {x: 0}, {x: -10*c},],
+            //         [{x: -55*c}, {x: 15*c}],
+            //         [{x: 80*c}, {x: -15*c}],
+            //         [{y: 25*c}, {y: -30*c}],
+            //         [{x: -55*c}, {x: 15*c}],
+            //         [{x: 80*c}, {x: -15*c}],
+            //         [{y: 25*c}, {y: -30*c}],
+            //         [{x: -30*c}, {x: -90*c}],
+            //         [{x: -90*c, y: -30*c}],
+            //         [{x: -30*c}, {x: -90*c}],
+            //         [{x: -90*c, y: -30*c}],
+            //     ],
+            //     periods: [250, 200],
+            //     delay: [false, 50],
+            //     repeat: false,
+            //     reset: false
+            // },
             'MoveTo': {
                 joints: ['Astronaut', 'root'],
                 attributes: ['rotation', 'position'],
@@ -249,7 +265,7 @@ export const Data = {
                 repeat: false,
                 reset: false
             },
-            'Crunch': {
+            'Crouch': {
                 joints: ['upTronco', 'rightShoulder', 'leftShoulder', 'rightElbow', 'leftElbow', 'rightHip', 'leftHip', 'rightKnee', 'leftKnee'],
                 attributes: ['rotation','rotation','rotation','rotation','rotation','rotation','rotation','rotation','rotation'],
                 frames: [
@@ -275,7 +291,7 @@ export const Data = {
             // 'Pitch': {
 
             // },
-            'Boarding': {
+            'Boarding': {   // 
                 joints: ['root', 'leg1', 'leg2', 'leg3','leg4'],
                 attributes: ['position', 'position', 'position', 'position', 'position'],
                 frames: [
@@ -316,30 +332,7 @@ export const Data = {
                 repeat: false,
                 reset: false,
             }
-
-            // 'MoveTo': {
-            //     joints: ['SpaceShip'],
-            //     attributes: ['position'], 
-            //     frames: [[{x: 0, y: 12.45, z: 0}]],
-            //     periods: [1000],
-            //     dealy: [300],
-            //     repeat: false,
-            //     reset: false,
-            // }
         }
     }
 
 }
-/*
-    MODIFIED Structure:
-    Name: [
-        [
-            {
-                joint: 'jointName',
-                to: {variable: value},
-                period: t
-            }
-        ]
-    ]
-
-*/

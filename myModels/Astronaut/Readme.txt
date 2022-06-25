@@ -2,6 +2,12 @@ NOTES:
 
 The Character faces the X Axis and it is in the default static pose.
 --------------------------------------------------------------------------------------
+New in version 1.4:
+- Implemented phong material
+- Applied metal texture on body
+- light emissive blue and yellow color for joints 
+- Now in a more natural static pose.
+--------------------------------------------------------------------------------------
 New in version 1.3:
 - New Smooth Cylinder objects. (asymmetric radius)
 - Shadow Cast Introduced.

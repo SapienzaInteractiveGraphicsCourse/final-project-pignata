@@ -5,8 +5,8 @@ export class Player {
     static players = [];
     // active = false;
     animations = {};
-    playlist = 0;              // number of current animations playing.
-    active = false;
+    active = false;             // Enable Player Interactions.
+    pov = false;                // Enable first person prospective
 
 
 // //  Position Parameters:
@@ -26,7 +26,7 @@ constructor(obj){
         this.updateAxis()
         console.log("New Player: ", this.name)
 
-//      COMPUTE ANIMATIONS:
+//      Load and Compute Animations:
         for (const [name, clip] of Object.entries(Data[this.name].animations)) {
             let joints = [];
             clip.joints.forEach((joint, i) => {
@@ -111,7 +111,9 @@ constructor(obj){
     }
 
     alignToZenith() {
-/* Function to Align the model respect the tangent to the planet surface. */ 
+/* Function to Align the model respect the tangent to the planet surface.
+        DEPRECATED 
+*/ 
         let up = new THREE.Vector3()								// up = up direction in world space.
         this.model.getWorldPosition(up)
         up.normalize() 
@@ -209,8 +211,7 @@ export class Animation{
     stop() {
         if(this.playing){
             this.playing = false;
-            this.group.getAll().forEach((tween) => tween.stop());
-        
+            this.group.getAll().forEach((tween) => tween.stop());        
         }
     }
 

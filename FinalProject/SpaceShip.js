@@ -4,8 +4,8 @@ import {Player, Animation} from "./Player.js";
 
 export class SpaceShip extends Player {
 	constructor(model) {
-		model.rotation.set(Math.PI*0.1, 0, Math.PI*0.1)
-		model.getObjectByName('shipCam').name = 'PlayerCam'
+		// model.rotation.set(Math.PI*0.1, 0, Math.PI*0.1)
+		// model.getObjectByName('shipCam').name = 'PlayerCam'
 		super(model)
 		model.getObjectByName('Arrows').visible = this.active;
 		this.engine = false

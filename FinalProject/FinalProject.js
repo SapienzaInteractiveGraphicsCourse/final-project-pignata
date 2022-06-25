@@ -12,7 +12,7 @@ window.onload = loadScene();
 function loadScene(){
     THREE.Cache.enabled = false;
     const loader = new THREE.ObjectLoader();
-    loader.load(('scenes/scene6.json'), function (scene) {init(scene)});
+    loader.load(('scenes/scene8.json'), function (scene) {init(scene)});
     //loader.load(('scenes/PlanetSystem.json'), function (scene) {init(scene)});
     //loader.load(('scenes/CharacterAnimation.json'), function (scene) {init(scene)});
 
@@ -20,43 +20,50 @@ function loadScene(){
 
 function init(scene){
 //  Set the canvas: 
+    const canvas = document.getElementById("gl-canvas");
+    canvas.width  = window.innerWidth*0.9;
+    canvas.height = window.innerHeight*0.9;
+    canvas.style = "position: absolute; top: 0px; left: 0px; right: 0px; bottom: 0px; margin: auto; border:2px solid white";
 
-const canvas = document.getElementById("gl-canvas");
-canvas.width  = window.innerWidth*0.9;
-canvas.height = window.innerHeight*0.9;
-canvas.style = "position: absolute; top: 0px; left: 0px; right: 0px; bottom: 0px; margin: auto; border:2px solid white";
-
-//  Set the Renderer options:
-const renderer = new THREE.WebGLRenderer({canvas});
+    //  Set the Renderer options:
+    const renderer = new THREE.WebGLRenderer({canvas});
     renderer.physicallyCorrectLights = true;
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.BasicShadowMap; //THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
-
-//  Get all nodes names:
+    
+    //  Get all nodes names:
     let nodes = [];
     getChildrenNames(scene);
-//  Set the Camera:
-    let camera = scene.getObjectByName("PlayerCam");
-    window.addEventListener('resize', resize);
-
-//  Scene Configuration: 
-    // let vStars =  0.005;
-    // let vPlanet = 0.0005;
-    // let vUniverse = -0.0005;
-
-//  Lights:
-
-//  Set the Astronaut as Player:
+    
+    //  Set the Astronaut as Player:
     const astronaut = scene.getObjectByName("Astronaut");
     const player = new Astronaut(astronaut);
     player.active = true;
-
-//  SpaceShip:
-    // const ship = scene.getObjectByName("SpaceShip");
+    
+    //  Set the Camera:
+    let camera = astronaut.getObjectByName("PlayerCam");
+    window.addEventListener('resize', resize);
+    //  SpaceShip:
     const ship = new SpaceShip(scene.getObjectByName("SpaceShip"))
     console.log(Player.players)
-    // const spherical = new
-    // ship.position.setF
+
+    //  AUDIO
+    const stream = "https://cdn.rawgit.com/ellenprobst/web-audio-api-with-Threejs/57582104/lib/TheWarOnDrugs.m4a";
+    // create an AudioListener and add it to the camera
+    const listener = new THREE.AudioListener();
+    camera.add( listener );
+    const sound = new THREE.Audio( listener );
+    
+    // load a sound and set it as the Audio object's buffer
+    const audioLoader = new THREE.AudioLoader();
+    audioLoader.load( stream, function( buffer ) {
+        sound.setBuffer( buffer );
+        sound.setLoop( true );
+        sound.setVolume( 0.5 );
+        sound.play();
+        sound.pause();
+    });
+    
 
 
 //  Function calls:
@@ -86,15 +93,12 @@ const renderer = new THREE.WebGLRenderer({canvas});
                     camera = ship.model.getObjectByName('PlayerCam')
                 break;
                 case 'Space':
+                    sound.context.resume();
 					player.callSpaceShip(ship)
                 break;
                 case 'KeyP':
 					player.boarding(ship)
 				break;
-
-                case 'Digit8':
-                    Player.players[0].root.position.set(0,0,0)
-                    Player.players[1].root.add(Player.players[0].model)
             }
         })
         
@@ -107,31 +111,14 @@ const renderer = new THREE.WebGLRenderer({canvas});
     }
 
     function orbits(t){
-//      Compute Planet Rotation, Stars Revolution and Universe Rotation.  
+//      Compute Stars Revolution and Universe Rotation.  
         scene.getObjectByName("Stars").rotateY(0.005);
         scene.getObjectByName("Universe").rotateX(-0.0005);
         // scene.getObjectByName("Planet Zigarov").rotateZ(0.0005);
     }
 
-    function setArrowHelpers(){
-//      Set the Arrow Helpers for directions...
-        const origin = new THREE.Vector3(-1.5, -0.5, 0);
-        const length = 0.5;
-        const hex = 0xffffff;
-        const dirX = new THREE.Vector3( 1, 0, 0 );
-        const dirY = new THREE.Vector3( 0, 1, 0 );
-        const dirZ = new THREE.Vector3( 0, 0, 1 );
-            const arrowHelpers = [
-            new THREE.ArrowHelper( dirX, origin, length, 0xFF0000),
-            new THREE.ArrowHelper( dirY, origin, length, 0x00FF00),
-            new THREE.ArrowHelper( dirZ, origin, length, 0x0000FF),
-            // new THREE.ArrowHelper( dirZ, origin, length-0.2, hex),
-        ];
-        arrowHelpers.forEach((arrow) => {astronaut.getObjectByName('root').add(arrow);});
-    }
-
     function guiOptions(){
-//      Set all the user controls: Lights, Cam.   
+//      Set all the user control settings: Lights, Cam.   
         const gui = new GUI() 
 
 //      Camera Controls:     

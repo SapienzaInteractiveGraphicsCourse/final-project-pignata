@@ -84,10 +84,8 @@ export class Astronaut extends Player {
                                 const walkClipName = (astronaut.gravity) ? 'Run' : 'Walk'
                                 astronaut.animations[walkClipName].start()
                             } 
-                            if(astronaut.turning) {
-                            }
+                            else astronaut.animations.Reset.start();
                             astronaut.jumping = false;
-                            // astronaut.animations.Reset();
                         }
                         this.animations[clipName].start()
                         this.jumping = true
@@ -100,7 +98,7 @@ export class Astronaut extends Player {
                         console.log('Gravity: ', this.gravity)
                         break;
                     case 'Digit9':
-                        this.pov()
+                        this.changePOV()
                 }
             }
         });
@@ -111,11 +109,11 @@ export class Astronaut extends Player {
                         const clipNames = ['Walk', 'Run']
                         clipNames.forEach(clipName => {
                             this.animations[clipName].stop()
+                            if(!this.jumping) this.animations.Reset.start();
                         })
                         this.moving = false;
                         this.dX = 0;
-                        if(!this.jumping) this.animations.Reset.start();
-                        if(this.dY >0) this.animations.TurnRight.start();
+                        // if(this.dY >0) this.animations.TurnRight.start();
                     break;
                     case "KeyA":
                         if(this.animations.TurnLeft.playing) this.animations.TurnLeft.stop();
@@ -171,7 +169,7 @@ export class Astronaut extends Player {
 	boarding(ship) {
 		this.animations.MoveTo.frames[1] = [{y: '+2'}]
 		this.animations.MoveTo.delay = [1000]
-		this.animations.Crunch.delay = [1000]
+		this.animations.Crouch.delay = [1000]
         // const astronaut = this.model
         this.animations.MoveTo.onComplete = function() {
             const astronaut = Player.players[0];
@@ -194,22 +192,22 @@ export class Astronaut extends Player {
             ship.active = true
             ship.model.getObjectByName('lightTarget').position.set(0,0,-1)
         }
-		this.animations.CamTransition.concat = [this.animations.MoveTo, this.animations.Crunch]
+		this.animations.CamTransition.concat = [this.animations.MoveTo, this.animations.Crouch]
 		this.animations.TurnBack.start()
 		this.animations.CamTransition.start()
         this.active = false
 	}
 
-    pov(){
-        const cam = this.model.getObjectByName('PlayerCam');
-        cam.fov = 80
-        // this.model.getObjectByName('Head').add(cam)
-        cam.position.set(0,0.5,0.2)
-
-        // this.model.getObjectByName('lightEye').position.set(0,1,1)
-        // this.model.getObjectByName('lightEye').position.set(0,1,-1)
-        // this.model.getObjectByName('lightEye').position.set(0,1,-1)
-                // cam.rotation.x = Math.PI
+    changePOV(){
+        if (!this.pov){
+            this.cam.fov = 80
+            this.cam.position.set(0,0.5,0.2)
+            this.pov = true;
+        } else {
+            this.pov = false;
+            this.cam.position.set(0,2,-2)
+            this.cam.fov = 50;
+        }
     }
 
 	get moving(){
