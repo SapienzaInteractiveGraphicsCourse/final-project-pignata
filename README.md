@@ -13,7 +13,7 @@
 ## The Scene: The Planetary System
  The scene consists of a planet and two stars (light sources) that orbit around it. On the planet's surface, there are an astronaut (humanoid) and a spaceship, two animated hierarchical models. I entirely modeled the scene with the help of the official [3D editor](https://threejs.org/editor/), saved in the `scene.json` file, and imported it into the project during the initialization. 
 
-![scene](C:\Users\jluk3\Developer\final-project-pignata\myModels\scene.png)
+![scene](https://github.com/SapienzaInteractiveGraphicsCourse/final-project-pignata/blob/main/myModels/scene.png)
 
  When the web page is loaded, the user sees the scene through the `PlayerCam`, a camera that is initially fixed behind the back of the astronaut model, put on the north pole of the planet (assuming (0,1,0) as the North direction). In addition, **the user can control the animated movement** (Walk, TurnRight, TurnLeft, Jump) of this character on the surface of the planet. I implemented two versions of each animation, in order to simulate two different levels of gravity on the planet, that the user can control in the top-right menu. Without gravity, the astronaut's movements are slowed down in time and dilatated in space, as if it was walking on a zero-gravity planet, like the moon.
 
