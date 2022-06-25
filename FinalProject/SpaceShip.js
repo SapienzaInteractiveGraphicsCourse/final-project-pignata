@@ -80,7 +80,7 @@ export class SpaceShip extends Player {
 			}
 		});
 		window.addEventListener('wheel', (e) => {
-			if (e.deltaY > 0) this.shiftUp()
+			if (e.deltaY < 0) this.shiftUp()
 			else this.shiftDown()
 		})
 	}

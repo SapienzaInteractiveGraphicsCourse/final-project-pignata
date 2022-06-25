@@ -21,7 +21,7 @@ function loadScene(){
 function init(scene){
 //  Set the canvas: 
     const canvas = document.getElementById("gl-canvas");
-    canvas.width  = window.innerWidth*0.9;
+    canvas.width  = window.innerWidth*0.8;
     canvas.height = window.innerHeight*0.9;
     canvas.style = "position: absolute; top: 0px; left: 0px; right: 0px; bottom: 0px; margin: auto; border:2px solid white";
 
@@ -96,9 +96,6 @@ function init(scene){
                     sound.context.resume();
 					player.callSpaceShip(ship)
                 break;
-                case 'KeyP':
-					player.boarding(ship)
-				break;
             }
         })
         
