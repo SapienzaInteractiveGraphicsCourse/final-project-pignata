@@ -11,6 +11,7 @@ export class SpaceShip extends Player {
 		this.engine = false
 		this.land = true;
 		this.inAtmosphere = true;
+		this.model.getObjectByName('SpotLight').position.set(0,0.5,0)
 		this.model.getObjectByName('lightTarget').position.set(0,-1,0)
 		model.getObjectByName("SpotLight").target = model.getObjectByName('lightTarget');
 		this.root.add(this.model.getObjectByName('shipLight'))
@@ -146,30 +147,11 @@ export class SpaceShip extends Player {
 	}
 
 	moveTo(rotationFrame) {
-		if (!this.active) this.active = true
-		const dx = rotationFrame.x - this.model.rotation.x;
-		const dy = rotationFrame.y - this.model.rotation.y;
-		const dz = rotationFrame.z - this.model.rotation.z;
-
-		const dX = (dx >=0) ? String().concat('+',dx.toFixed(3)) : String(dx.toFixed(3))
-		const dY = (dy >=0) ? String().concat('+',dy.toFixed(3)) : String(dy.toFixed(3))
-		const dZ = (dz >=0) ? String().concat('+',dz.toFixed(3)) : String(dz.toFixed(3))
-
-		const frame = {
-			x: dX,
-			y: dY,
-			z: dZ,
-		}
-
-		this.animations.MoveTo.frames[0] = [frame]
-		// this.animations.MoveTo.frames[1]. [{y: '+0'}]
+		this.animations.MoveTo.frames[0] = [rotationFrame]
 		this.animations.MoveTo.periods[0] = 1000
 		this.animations.MoveTo.delay = false
 		this.animations.MoveTo.concat = [this.animations.Doors]
 		if (this.land) {
-			// let periods = 0.0;
-			// this.animations.Boarding.periods.forEach(period => {periods+=period})
-			// this.animations.MoveTo.delay[0] = periods
 			this.animations.Boarding.concat = [this.animations.MoveTo]
 			this.animations.Boarding.start()
 			this.land = false

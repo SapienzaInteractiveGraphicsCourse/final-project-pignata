@@ -156,41 +156,37 @@ export class Astronaut extends Player {
 	}
 
 	callSpaceShip(ship) {
-		console.log('Calling the SpaceShip...')
-		const rotationFrame = {
-			x: this.model.rotation.x,
-			y: this.model.rotation.y,
-			z: this.model.rotation.z,
-		}
-		ship.moveTo(rotationFrame)
-        this.boarding(ship)
+        if(this.active) {
+            console.log('Calling the SpaceShip...')
+            const rotationFrame = {
+                x: this.model.rotation.x,
+                y: this.model.rotation.y,
+                z: this.model.rotation.z,
+            }
+            ship.moveTo(rotationFrame)
+            this.boarding(ship)
+        }
 	}
 
 	boarding(ship) {
 		this.animations.MoveTo.frames[1] = [{y: '+2'}]
 		this.animations.MoveTo.delay = [1000]
 		this.animations.Crouch.delay = [1000]
-        // const astronaut = this.model
         this.animations.MoveTo.onComplete = function() {
             const astronaut = Player.players[0];
             const ship = Player.players[1];
             console.log(ship.model.rotation)
             astronaut.root.position.set(0,0,0)
             astronaut.model.rotation.set(0,0,0)
-            // ship.root.rotation.set(
-            //     ship.model.rotation.x,
-            //     ship.model.rotation.y,
-            //     ship.model.rotation.z,
-            // )
             ship.root.add(astronaut.model)
-            console.log(
-                "Ship Model ", ship.model.rotation,
-                "\nShip Root ", ship.root.rotation,
-                "\nAM " , astronaut.model.rotation,
-                "\nAR", astronaut.root.rotation,   
-                )
             ship.active = true
-            ship.model.getObjectByName('lightTarget').position.set(0,0,-1)
+            ship.engine = true
+            const spotLight = ship.model.getObjectByName('SpotLight')
+            spotLight.getObjectByName('lightTarget').position.set(0,0,1)
+            spotLight.angle *=2
+            spotLight.decay = 2
+            spotLight.penumbra = .1
+            spotLight.intensity = 30
         }
 		this.animations.CamTransition.concat = [this.animations.MoveTo, this.animations.Crouch]
 		this.animations.TurnBack.start()
