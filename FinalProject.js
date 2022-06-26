@@ -1,7 +1,7 @@
-import * as THREE from './resources/three/build/three.module.js';
-// import { OrbitControls } from '../resources/three/examples/jsm/controls/OrbitControls.js';
-// import {GLTFLoader} from '../resources/three/examples/jsm/loaders/GLTFLoader.js';
-import {GUI} from "./resources/three/examples/jsm/libs/dat.gui.module.js"
+import * as THREE from './sources/three/build/three.module.js';
+// import { OrbitControls } from '../sources/three/examples/jsm/controls/OrbitControls.js';
+// import {GLTFLoader} from '../sources/three/examples/jsm/loaders/GLTFLoader.js';
+import {GUI} from "./sources/three/examples/jsm/libs/dat.gui.module.js"
 import {Player} from "./Player.js"
 import { Astronaut } from './Astronaut.js';
 import { SpaceShip } from './SpaceShip.js';
