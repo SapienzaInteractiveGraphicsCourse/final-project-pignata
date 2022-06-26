@@ -43,27 +43,17 @@ function init(scene){
     //  Set the Camera:
     let camera = astronaut.getObjectByName("PlayerCam");
     window.addEventListener('resize', resize);
-    //  SpaceShip:
-    const ship = new SpaceShip(scene.getObjectByName("SpaceShip"))
-    console.log(Player.players)
 
-    //  AUDIO
+
+//  create an AudioListener and add it to the camera
     const stream = "https://cdn.rawgit.com/ellenprobst/web-audio-api-with-Threejs/57582104/lib/TheWarOnDrugs.m4a";
-    // create an AudioListener and add it to the camera
     const listener = new THREE.AudioListener();
     camera.add( listener );
     const sound = new THREE.Audio( listener );
-    
-    // load a sound and set it as the Audio object's buffer
-    const audioLoader = new THREE.AudioLoader();
-    audioLoader.load( stream, function( buffer ) {
-        sound.setBuffer( buffer );
-        sound.setLoop( true );
-        sound.setVolume( 0.5 );
-        sound.play();
-        sound.pause();
-    });
-    
+
+    //  SpaceShip:
+    const ship = new SpaceShip(scene.getObjectByName("SpaceShip"))
+    console.log(Player.players)    
 
 
 //  Function calls:
@@ -93,7 +83,18 @@ function init(scene){
                     camera = ship.model.getObjectByName('PlayerCam')
                 break;
                 case 'Space':
-                    sound.context.resume();
+                    // sound.context.resume();
+                    
+                    // load a sound and set it as the Audio object's buffer
+                    const audioLoader = new THREE.AudioLoader();
+                    audioLoader.load( stream, function( buffer ) {
+                        sound.setBuffer( buffer );
+                        sound.setLoop( true );
+                        sound.setVolume( 0.5 );
+                        sound.play();
+                        // sound.pause();
+                    });
+
 					player.callSpaceShip(ship)
                 break;
             }
