@@ -21,7 +21,7 @@ function loadScene(){
 function init(scene){
 //  Set the canvas: 
     const canvas = document.getElementById("gl-canvas");
-    canvas.width  = window.innerWidth*0.8;
+    canvas.width  = window.innerWidth*0.9;
     canvas.height = window.innerHeight*0.9;
     canvas.style = "position: absolute; top: 0px; left: 0px; right: 0px; bottom: 0px; margin: auto; border:2px solid white";
 
@@ -42,8 +42,8 @@ function init(scene){
     
     //  Set the Camera:
     let camera = astronaut.getObjectByName("PlayerCam");
-    console.log(camera)
     window.addEventListener('resize', resize);
+    resize()
 
 
 //  create an AudioListener and add it to the camera
@@ -54,13 +54,11 @@ function init(scene){
 
     //  SpaceShip:
     const ship = new SpaceShip(scene.getObjectByName("SpaceShip"))
-    console.log(Player.players)    
-
 
 //  Function calls:
     configureInputs();
     // setArrowHelpers();
-    // guiOptions();
+    guiOptions();
     render();
 
     function render() {
@@ -100,6 +98,12 @@ function init(scene){
                 break;
                 case 'Digit9':
                     changePOV();
+                break;
+                case 'Digit8':
+                    console.log(sound.isPlaying)
+                    if (sound.isPlaying) sound.pause();
+                    else sound.play();
+                break; 
             }
         })
     }
@@ -176,24 +180,30 @@ function init(scene){
     }
 
     function changePOV() { 
+        const arrows = camera.getObjectByName("Arrows")
 		if (!player.pov){
-			camera.fov = 90
+            camera.fov = 80
+            arrows.scale.set(2, 2, 2)
+            arrows.position.x +=0.1
 			camera.position.set(0,0.5,0.2)
             console.log(player.pov)
             player.pov = true;
+
 		} else {
+            arrows.scale.set(1,1,1)
+            arrows.position.x -=0.1
             if(player.active) {
                 camera.position.set(0, 2, -2);
                 camera.rotation.x = -2.618
-                camera.fov = 50;
             }
             else {
                 camera.position.set(0, 0.56, -5)
-                camera.fov = 80;
+                // camera.fov = 80;
                 camera.rotation.x = -Math.PI;    
             }
+            camera.fov = 50;
             player.pov = false;
-		}
+		}       
 	}
 }
 

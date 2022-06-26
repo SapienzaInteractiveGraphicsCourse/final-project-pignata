@@ -39,10 +39,10 @@ export class SpaceShip extends Player {
 					case "ArrowDown": this.shiftDown();              // Down
 					break;
 					case "KeyW":                              
-						if (this.engine && this.pitch < 0.025) this.pitch = 0.025;
+						if (this.engine && this.pitch < 0.025) this.pitch = -0.025;
 					break;
 					case "KeyS":                                
-						if (this.engine && this.pitch > -0.025) this.pitch = -0.025;
+						if (this.engine && this.pitch > -0.025) this.pitch = 0.025;
 					break;
 					case "KeyA":                                
 						if (this.engine && this.yaw < 0.025) this.yaw = 0.025;
@@ -114,7 +114,7 @@ export class SpaceShip extends Player {
 		const fw_1 = this.fw.clone()
 		fw_1.z *= -1            
 		fw_1.x *= -1 
-		arrows[0].setDirection(this.fw)
+		arrows[1].setDirection(this.fw)
 		arrows[1].setDirection(fw_1)
 }
 

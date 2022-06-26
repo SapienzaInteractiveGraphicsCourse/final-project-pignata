@@ -8,7 +8,6 @@ export class Player {
     active = false;             // Enable Player Interactions.
     pov = false;                // Enable first person prospective
 
-
 // //  Position Parameters:
 constructor(obj){
         this.name = obj.name;
@@ -24,7 +23,6 @@ constructor(obj){
         // setArrowHelpers(obj.getObjectByName('root'), this.fw, this.up, this.w)
         setArrowHelpers(this.cam, this.fw, this.up, this.w)
         this.updateAxis()
-        console.log("New Player: ", this.name)
 
 //      Load and Compute Animations:
         for (const [name, clip] of Object.entries(Data[this.name].animations)) {
@@ -49,25 +47,33 @@ constructor(obj){
 
         function setArrowHelpers(cam, fw , up, w){
 //      Set the Arrow Helpers for directions...
-            const origin = new THREE.Vector3( 0.2 , -0.15, -0.5);
+            const zero = new THREE.Vector3( 0 , 0, 0);
+            const origin = new THREE.Vector3( 0.3 , -0.15, -0.5)
             const length = 0.1;
             const dirX = new THREE.Vector3( -1, 0, 0 );
             const dirY = new THREE.Vector3( 0, 1, 0 );
             const dirZ = new THREE.Vector3( 0, 0, -1 );
             const fw_1 = fw.clone()
             fw_1.z *= -1            
-            fw_1.x *= -1            
+            fw_1.x *= -1 
             const arrowHelpers = [
-                new THREE.ArrowHelper(fw, origin, length*0.8, 0xFFFFFF),
-                new THREE.ArrowHelper(fw_1, origin, length*0.8, 0xFFFF00),
-                new THREE.ArrowHelper( dirX, origin, length, 0xFF0000),
-                new THREE.ArrowHelper( dirY, origin, length, 0x00FF00),
-                new THREE.ArrowHelper( dirZ, origin, length, 0x0000FF),
+                new THREE.ArrowHelper(fw_1, zero, length*0.2, 0xFFFF00, length*0.2),
+                new THREE.ArrowHelper( dirX, zero, length*0.6, 0xFF0000),
+                new THREE.ArrowHelper( dirY, zero, length*0.6, 0x00FF00),
+                new THREE.ArrowHelper( dirZ, zero, length*0.6, 0x0000FF),
             ];
+            var geometry = new THREE.SphereGeometry(length*0.5, 10, 10);
+            var material = new THREE.MeshBasicMaterial({
+                color: 0xAAAAAA,
+                wireframe: true
+            });
+            const globe = new THREE.Mesh(geometry, material);
             const arrows = new THREE.Group()
             arrows.name = 'Arrows'
-            arrowHelpers.forEach((arrow) => {arrows.add(arrow);});
             cam.add(arrows)
+            arrows.position.copy(origin)
+            arrows.add(globe);
+            arrowHelpers.forEach((arrow) => {arrows.add(arrow);});
         }
             
     }
@@ -92,15 +98,40 @@ constructor(obj){
         const root =  this.model.getObjectByName('root')
         root.getWorldDirection( this.fw ) // Returns a vector representing the direction of object's positive z-axis in world space.
         root.getWorldPosition(this.up)
+        const p = this.up.clone()
         this.up.normalize()
         this.w.crossVectors(this.fw, this.up)
+        this.updateArrows(p,this.fw)
 
-        const arrows = root.getObjectByName("Arrows").children
-        const fw_1 = this.fw.clone()
+        // const arrows = root.getObjectByName("Arrows").children
+        // const fw_1 = this.fw.clone()
+        // fw_1.z *= -1            
+        // fw_1.x *= -1 
+        // const origin = new THREE.Vector3( 0.35 , -0.35, -1.0).multiplyScalar(this.cam.fov * 0.01);
+        // const d = p.distanceTo(new THREE.Vector3(0,0,0))
+        // p.multiplyScalar(0.05)
+        // p.x *=-1
+        // p.z*=-1
+        // origin.add(p)
+        // arrows[1].position.copy(origin)
+        // arrows[1].setDirection(fw_1)
+    }
+    updateArrows(p, fw) {
+        const arrows = this.root.getObjectByName("Arrows").children
+        const fw_1 = fw.clone()
         fw_1.z *= -1            
         fw_1.x *= -1 
-        arrows[0].setDirection(this.fw)
         arrows[1].setDirection(fw_1)
+
+        const d = p.distanceTo(new THREE.Vector3(0,0,0))
+        p.multiplyScalar(0.05/d)
+        p.x *=-1
+        p.z*=-1
+        arrows[1].position.copy(p)
+
+        if(d>15) {
+            arrows[0].scale.set(10/d, 10/d, 10/d)
+        }
     }
 
     reset(){
@@ -135,6 +166,40 @@ constructor(obj){
             }
         }
     }
+
+    // setArrowHelpers(cam, fw , up, w){
+    //     //      Set the Arrow Helpers for directions...
+    //             // const origin = new THREE.Vector3( 0.2 , -0.2, -0.5);
+    //             const origin = new THREE.Vector3( 0.4 , -0.4, -1.0).multiplyScalar(cam.fov * 0.01);
+    //             const length = 0.1;
+    //             const dirX = new THREE.Vector3( -1, 0, 0 );
+    //             const dirY = new THREE.Vector3( 0, 1, 0 );
+    //             const dirZ = new THREE.Vector3( 0, 0, -1 );
+    //             const fw_1 = fw.clone()
+    //             fw_1.z *= -1            
+    //             fw_1.x *= -1 
+    //             console.log(origin)
+    //             const O = origin.clone()
+    //             const p = up.clone()
+    //             p.multiplyScalar(length)
+    //             O.add(p)
+    //             console.log(O)
+    //             // const p = up.copy.multiplyScalar(length);
+    //             // O.add(p);
+    //             // const arrow = new THREE.ArrowHelper( fw_1, P, 0.3, 0xFFFFFF)            
+    //             const arrowHelpers = [
+    //                 new THREE.ArrowHelper(fw_1, origin, length*0.8, 0xFFFFFF),
+    //                 new THREE.ArrowHelper( fw_1, O, 0.08, 0xFFFF00),
+    //                 new THREE.ArrowHelper( dirX, origin, length, 0xFF0000),
+    //                 new THREE.ArrowHelper( dirY, origin, length, 0x00FF00),
+    //                 new THREE.ArrowHelper( dirZ, origin, length, 0x0000FF),
+    //             ];
+    //             const arrows = new THREE.Group()
+    //             arrows.name = 'Arrows'
+    //             arrowHelpers.forEach((arrow) => {arrows.add(arrow);});
+    //             cam.add(arrows)
+    //         }
+        
 
 }
 
