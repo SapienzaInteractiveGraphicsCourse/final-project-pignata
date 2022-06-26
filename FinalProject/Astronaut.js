@@ -4,7 +4,7 @@ import {Player, Animation} from "./Player.js"
 export class Astronaut extends Player {
     dX = 0.0;                                       // Increment of X Angle Rotation        
     dY = 0.0;                                       // Increment of Y Angle Rotation
-    gravity = false;    
+    gravity = true;    
 	moving = false;
     turning = false;
     jumping = false;
@@ -26,7 +26,6 @@ export class Astronaut extends Player {
 		}
 
 		this.animations.TurnBack.onComplete = function() {
-            console.log(Player.players[0].root.rotation)
 			animations.Run.stop()
 			// animations.Run.delay = false
 			animations.Reset.start()
@@ -60,13 +59,20 @@ export class Astronaut extends Player {
                         if(this.animations.TurnLeft.playing) this.animations.TurnLeft.stop()
                         if (this.dY >= 0.0){
                             this.animations.TurnRight.start();
+                            // this.animations.Run.start();
                             this.turning = true
                             this.dY = -0.03;
                         }
                         break;
                     case "KeyS":
+                        const frames = this.animations.CamTransition.frames;
+                        // this.animations.CamTransition.frames = [[{y: "+3.1415"}], [{y:"+0"}]]
+                        // this.animations.CamTransition.onComplete = function() {
+                        //     this.frames = frames
+                        // }
+                        // this.animations.TurnBack.concat = [this.animations.CamTransition]
                         this.animations.TurnBack.start();
-                        this.turning = true
+                        // this.turning = true
                         // this.fw = this.dirX.applyAxisAngle(this.dirY, 3.1415)
                         break;
                     case "KeyJ":
@@ -97,8 +103,6 @@ export class Astronaut extends Player {
                         this.gravity = !this.gravity;
                         console.log('Gravity: ', this.gravity)
                         break;
-                    case 'Digit9':
-                        this.changePOV()
                 }
             }
         });
@@ -108,8 +112,10 @@ export class Astronaut extends Player {
                     case "KeyW":
                         const clipNames = ['Walk', 'Run']
                         clipNames.forEach(clipName => {
-                            this.animations[clipName].stop()
-                            if(!this.jumping) this.animations.Reset.start();
+                            if(!this.turning) {
+                                this.animations[clipName].stop()
+                                if(!this.jumping) this.animations.Reset.start();
+                            }
                         })
                         this.moving = false;
                         this.dX = 0;
@@ -124,6 +130,7 @@ export class Astronaut extends Player {
                     break;
                     case "KeyD":
                         this.animations.TurnRight.stop();
+                        if (!this.moving) this.animations.Run.stop();
                         if(!this.animations.TurnLeft.playing) this.animations.Reset.start();
                         this.turning = false;
                         this.dY = 0;
@@ -135,7 +142,7 @@ export class Astronaut extends Player {
                         // this.dX = 0;
                         // this.animations.Walk.stop();
                         // this.animations.Reset.start()
-                    break;
+                    break;                    
                 }
             }
         });
@@ -189,22 +196,11 @@ export class Astronaut extends Player {
             spotLight.intensity = 30
         }
 		this.animations.CamTransition.concat = [this.animations.MoveTo, this.animations.Crouch]
-		this.animations.TurnBack.start()
+		// this.animations.TurnBack.start()
 		this.animations.CamTransition.start()
+        if (this.pov) this.pov = false;
         this.active = false
 	}
-
-    changePOV(){
-        if (!this.pov){
-            this.cam.fov = 80
-            this.cam.position.set(0,0.5,0.2)
-            this.pov = true;
-        } else {
-            this.pov = false;
-            this.cam.position.set(0,2,-2)
-            this.cam.fov = 50;
-        }
-    }
 
 	get moving(){
         return this.animations.Walk.playing;

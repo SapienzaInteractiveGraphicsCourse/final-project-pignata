@@ -2,7 +2,7 @@ const c = Math.PI/180;      // Conversion deg -> rad
 const r = 10.56;            // Planet Radius = 10 + legs = 0.56; 
 
 export const Data = {
-/* HOW TO READ THE DATA:
+/* HOW TO READ DATA:
 Data = {
     'Character Name': {
         animations: {
@@ -10,7 +10,10 @@ Data = {
                 joints: List of joint names. A joint is the THREE.js Object/Group to animate.
                 attributes: For each joint is associated an attribute to update during the animation by the tweening engine (rotation or position).
                 frames: For each joint there is a list o keyframes. A keyframe is a dictionary with parameters (x,y,z) as keys and the value to set the respective tween, i.e, the final value or the increment that the tweening engine use to update the parameters (key). 
-                periods: durat
+                periods: tweens durations expressed in milliseconds.
+                delay:  delay to apply from a keyframe to the next.
+                repeat: boolean that enables repetition.
+                reset: boolean that enables reset to the static pose (look at Reset Animation).
             }
         }
     }
@@ -66,7 +69,7 @@ Data = {
                     [ {x: 15*c}, {x: 0*c}, {x: -30*c}, {x: -45*c},      {x: -35*c}, {x: -30*c}, {x: 5*c}, {x: 45*c} ],                      // leftShoulder
                     [ {x: -45*c}, {x: -45*c}, {x: -90*c}, {x: -90*c},   {x: -90*c}, {x: -90*c}, {x: -90*c}, {x: -75*c} ],                   // leftElbow
                 ],
-                periods: [200, 400, 400, 200, 200, 400, 400, 200],
+                periods: [100, 300, 300, 100, 100, 300, 300, 100],
                 delay: false,
                 repeat: true,
                 reset: true,

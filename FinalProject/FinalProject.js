@@ -42,34 +42,25 @@ function init(scene){
     
     //  Set the Camera:
     let camera = astronaut.getObjectByName("PlayerCam");
+    console.log(camera)
     window.addEventListener('resize', resize);
-    //  SpaceShip:
-    const ship = new SpaceShip(scene.getObjectByName("SpaceShip"))
-    console.log(Player.players)
 
-    //  AUDIO
+
+//  create an AudioListener and add it to the camera
     const stream = "https://cdn.rawgit.com/ellenprobst/web-audio-api-with-Threejs/57582104/lib/TheWarOnDrugs.m4a";
-    // create an AudioListener and add it to the camera
     const listener = new THREE.AudioListener();
     camera.add( listener );
     const sound = new THREE.Audio( listener );
-    
-    // load a sound and set it as the Audio object's buffer
-    const audioLoader = new THREE.AudioLoader();
-    audioLoader.load( stream, function( buffer ) {
-        sound.setBuffer( buffer );
-        sound.setLoop( true );
-        sound.setVolume( 0.5 );
-        sound.play();
-        sound.pause();
-    });
-    
+
+    //  SpaceShip:
+    const ship = new SpaceShip(scene.getObjectByName("SpaceShip"))
+    console.log(Player.players)    
 
 
 //  Function calls:
     configureInputs();
     // setArrowHelpers();
-    guiOptions();
+    // guiOptions();
     render();
 
     function render() {
@@ -93,18 +84,24 @@ function init(scene){
                     camera = ship.model.getObjectByName('PlayerCam')
                 break;
                 case 'Space':
-                    sound.context.resume();
+                    // sound.context.resume();
+                    
+                    // load a sound and set it as the Audio object's buffer
+                    const audioLoader = new THREE.AudioLoader();
+                    audioLoader.load( stream, function( buffer ) {
+                        sound.setBuffer( buffer );
+                        sound.setLoop( true );
+                        sound.setVolume( 0.5 );
+                        sound.play();
+                        // sound.pause();
+                    });
+
 					player.callSpaceShip(ship)
                 break;
+                case 'Digit9':
+                    changePOV();
             }
         })
-        
-        window.addEventListener('keyUp', (e) => {
-            switch(e.code){
-                
-            }
-        })
-
     }
 
     function orbits(t){
@@ -177,6 +174,27 @@ function init(scene){
             }
         }
     }
+
+    function changePOV() { 
+		if (!player.pov){
+			camera.fov = 90
+			camera.position.set(0,0.5,0.2)
+            console.log(player.pov)
+            player.pov = true;
+		} else {
+            if(player.active) {
+                camera.position.set(0, 2, -2);
+                camera.rotation.x = -2.618
+                camera.fov = 50;
+            }
+            else {
+                camera.position.set(0, 0.56, -5)
+                camera.fov = 80;
+                camera.rotation.x = -Math.PI;    
+            }
+            player.pov = false;
+		}
+	}
 }
 
 class ColorGUIHelper {
