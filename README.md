@@ -25,12 +25,12 @@ All the models can be found in the [myModels](https://github.com/SapienzaInterac
 
 ### The Astronaut
 
-![astronaut](C:\Users\jluk3\Developer\final-project-pignata\myModels\Astronaut\images\astronaut.png)
+![astronaut](https://github.com/SapienzaInteractiveGraphicsCourse/final-project-pignata/blob/main/myModels/Astronaut/images/astronaut.png)
 
  The first two images show the astronaut model, composed of 29 nodes, the camera `PlayerCam` and the spotlight `lightEye`, located in the Head. In particular, the *wired* nodes are the joints that are rotated during the animations. As it is possible to see, there are two types of nodes, cylindrical and spherical. Joints of the first type can rotate only in one direction, the others in all three directions. A texture is applied to the body parts of the model in order to appear as a metallic material.
 
 ### The Space-Ship
-## <img src="C:\Users\jluk3\Developer\final-project-pignata\myModels\SpaceShip\images\spaceship.png" alt="spaceship" style="zoom:150%;" />
+## <img src="https://github.com/SapienzaInteractiveGraphicsCourse/final-project-pignata/blob/main/myModels/SpaceShip/images/spaceship.png" alt="spaceship" style="zoom:150%;" />
 
 The ship model is composed of 16 nodes, a camera and two lights, the `shipLight` , a *pointlight* located one unit up respect the camera (which position is set to (0,1.5,5) wrt the spaceship object space), and the `spotlight` located 0.5 units down wrt the ship center. A second "metallic" texture is applied on the ring, to give impression of a metallic surface.
 
