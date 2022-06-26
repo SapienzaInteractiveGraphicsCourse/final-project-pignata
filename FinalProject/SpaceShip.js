@@ -50,8 +50,9 @@ export class SpaceShip extends Player {
 					case "KeyD":                                // D
 						if (this.engine && this.yaw > -0.025) this.yaw = -0.025;
 					break;
-					// case "ArrowLeft": this.dodge(-90);
-					// break;
+					case "ArrowLeft": 
+						this.dodge(-90);
+					break;
 					// case "ArrowRight": this.dodge(90);
 					// break;
 					// case "KeyQ": this.land();
@@ -161,5 +162,7 @@ export class SpaceShip extends Player {
 		}
 		this.active = true
 	}
+
+
 
 }

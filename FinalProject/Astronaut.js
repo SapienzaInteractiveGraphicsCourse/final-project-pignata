@@ -103,8 +103,6 @@ export class Astronaut extends Player {
                         this.gravity = !this.gravity;
                         console.log('Gravity: ', this.gravity)
                         break;
-                    case 'Digit9':
-                        this.changePOV()
                 }
             }
         });
@@ -144,7 +142,7 @@ export class Astronaut extends Player {
                         // this.dX = 0;
                         // this.animations.Walk.stop();
                         // this.animations.Reset.start()
-                    break;
+                    break;                    
                 }
             }
         });
@@ -198,22 +196,11 @@ export class Astronaut extends Player {
             spotLight.intensity = 30
         }
 		this.animations.CamTransition.concat = [this.animations.MoveTo, this.animations.Crouch]
-		this.animations.TurnBack.start()
+		// this.animations.TurnBack.start()
 		this.animations.CamTransition.start()
+        if (this.pov) this.pov = false;
         this.active = false
 	}
-
-    changePOV(){
-        if (!this.pov){
-            this.cam.fov = 80
-            this.cam.position.set(0,0.5,0.2)
-            this.pov = true;
-        } else {
-            this.pov = false;
-            this.cam.position.set(0,2,-2)
-            this.cam.fov = 50;
-        }
-    }
 
 	get moving(){
         return this.animations.Walk.playing;

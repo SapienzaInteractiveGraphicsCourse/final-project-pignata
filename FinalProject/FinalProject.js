@@ -42,6 +42,7 @@ function init(scene){
     
     //  Set the Camera:
     let camera = astronaut.getObjectByName("PlayerCam");
+    console.log(camera)
     window.addEventListener('resize', resize);
 
 
@@ -59,7 +60,7 @@ function init(scene){
 //  Function calls:
     configureInputs();
     // setArrowHelpers();
-    guiOptions();
+    // guiOptions();
     render();
 
     function render() {
@@ -97,15 +98,10 @@ function init(scene){
 
 					player.callSpaceShip(ship)
                 break;
+                case 'Digit9':
+                    changePOV();
             }
         })
-        
-        window.addEventListener('keyUp', (e) => {
-            switch(e.code){
-                
-            }
-        })
-
     }
 
     function orbits(t){
@@ -178,6 +174,27 @@ function init(scene){
             }
         }
     }
+
+    function changePOV() { 
+		if (!player.pov){
+			camera.fov = 90
+			camera.position.set(0,0.5,0.2)
+            console.log(player.pov)
+            player.pov = true;
+		} else {
+            if(player.active) {
+                camera.position.set(0, 2, -2);
+                camera.rotation.x = -2.618
+                camera.fov = 50;
+            }
+            else {
+                camera.position.set(0, 0.56, -5)
+                camera.fov = 80;
+                camera.rotation.x = -Math.PI;    
+            }
+            player.pov = false;
+		}
+	}
 }
 
 class ColorGUIHelper {
