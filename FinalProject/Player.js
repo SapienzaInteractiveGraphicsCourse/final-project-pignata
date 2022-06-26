@@ -7,11 +7,13 @@ export class Player {
     animations = {};
     active = false;             // Enable Player Interactions.
     pov = false;                // Enable first person prospective
+    collision = false;
 
 // //  Position Parameters:
 constructor(obj){
         this.name = obj.name;
         this.model = obj;
+        console.log(this.model.parent)
         this.root  = obj.getObjectByName('root')
         this.nodes = [];
         getChildrenNames(obj, this.nodes);
@@ -19,6 +21,7 @@ constructor(obj){
         this.up = new THREE.Vector3(0,1,0);   // Up Direction
         this.w = new THREE.Vector3(1,0,0);   // Tangent Direction
         this.cam = obj.getObjectByName('PlayerCam');
+        this.rayCaster = new THREE.Raycaster(new THREE.Vector3(0,10.56,0),this.fw,0.2, 5);
 
         // setArrowHelpers(obj.getObjectByName('root'), this.fw, this.up, this.w)
         setArrowHelpers(this.cam, this.fw, this.up, this.w)
@@ -92,29 +95,17 @@ constructor(obj){
             if (clip.playing) clip.update()
         }
         this.updateAxis()
+        this.checkCollision()
     }
 
     updateAxis() {
-        const root =  this.model.getObjectByName('root')
-        root.getWorldDirection( this.fw ) // Returns a vector representing the direction of object's positive z-axis in world space.
-        root.getWorldPosition(this.up)
+        this.root.getWorldDirection( this.fw ) // Returns a vector representing the direction of object's positive z-axis in world space.
+        this.root.getWorldPosition(this.up)
         const p = this.up.clone()
         this.up.normalize()
         this.w.crossVectors(this.fw, this.up)
+        this.rayCaster.set(p,this.fw);
         this.updateArrows(p,this.fw)
-
-        // const arrows = root.getObjectByName("Arrows").children
-        // const fw_1 = this.fw.clone()
-        // fw_1.z *= -1            
-        // fw_1.x *= -1 
-        // const origin = new THREE.Vector3( 0.35 , -0.35, -1.0).multiplyScalar(this.cam.fov * 0.01);
-        // const d = p.distanceTo(new THREE.Vector3(0,0,0))
-        // p.multiplyScalar(0.05)
-        // p.x *=-1
-        // p.z*=-1
-        // origin.add(p)
-        // arrows[1].position.copy(origin)
-        // arrows[1].setDirection(fw_1)
     }
     updateArrows(p, fw) {
         const arrows = this.root.getObjectByName("Arrows").children
@@ -167,40 +158,17 @@ constructor(obj){
         }
     }
 
-    // setArrowHelpers(cam, fw , up, w){
-    //     //      Set the Arrow Helpers for directions...
-    //             // const origin = new THREE.Vector3( 0.2 , -0.2, -0.5);
-    //             const origin = new THREE.Vector3( 0.4 , -0.4, -1.0).multiplyScalar(cam.fov * 0.01);
-    //             const length = 0.1;
-    //             const dirX = new THREE.Vector3( -1, 0, 0 );
-    //             const dirY = new THREE.Vector3( 0, 1, 0 );
-    //             const dirZ = new THREE.Vector3( 0, 0, -1 );
-    //             const fw_1 = fw.clone()
-    //             fw_1.z *= -1            
-    //             fw_1.x *= -1 
-    //             console.log(origin)
-    //             const O = origin.clone()
-    //             const p = up.clone()
-    //             p.multiplyScalar(length)
-    //             O.add(p)
-    //             console.log(O)
-    //             // const p = up.copy.multiplyScalar(length);
-    //             // O.add(p);
-    //             // const arrow = new THREE.ArrowHelper( fw_1, P, 0.3, 0xFFFFFF)            
-    //             const arrowHelpers = [
-    //                 new THREE.ArrowHelper(fw_1, origin, length*0.8, 0xFFFFFF),
-    //                 new THREE.ArrowHelper( fw_1, O, 0.08, 0xFFFF00),
-    //                 new THREE.ArrowHelper( dirX, origin, length, 0xFF0000),
-    //                 new THREE.ArrowHelper( dirY, origin, length, 0x00FF00),
-    //                 new THREE.ArrowHelper( dirZ, origin, length, 0x0000FF),
-    //             ];
-    //             const arrows = new THREE.Group()
-    //             arrows.name = 'Arrows'
-    //             arrowHelpers.forEach((arrow) => {arrows.add(arrow);});
-    //             cam.add(arrows)
-    //         }
-        
-
+    checkCollision(){
+        // if((typeof this.rayCaster !== 'undefined')&&(cast.distance <1)&&(!this.collision)){
+        //     console.log("Collision Detected");
+        //     this.collision = true;
+        //     // this.gear = 4;
+        //     // this.lights.children[1].intensity = this.engine;
+        // }
+        // else if((typeof cast !== 'undefined')&&(cast.distance >2)&&(this.collision)){
+        //     this.collision = false;
+        // }
+    }
 }
 
 export class Animation{

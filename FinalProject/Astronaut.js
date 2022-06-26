@@ -182,7 +182,6 @@ export class Astronaut extends Player {
         this.animations.MoveTo.onComplete = function() {
             const astronaut = Player.players[0];
             const ship = Player.players[1];
-            console.log(ship.model.rotation)
             astronaut.root.position.set(0,0,0)
             astronaut.model.rotation.set(0,0,0)
             ship.root.add(astronaut.model)
@@ -202,8 +201,21 @@ export class Astronaut extends Player {
         this.active = false
 	}
 
-	get moving(){
-        return this.animations.Walk.playing;
+    checkCollision() {
+        // const collisions = this.rayCaster.intersectObjects(this.model.parent.children, true)
+        // if (!this.collision && collisions.length > 0 && collisions[0].distance < 1.5){
+        //     this.collision = true;
+        //     this.dX = 0;
+        //     console.log('Collision Imminent: ', collisions[0].distance)
+        // }
+        // else if (this.collision) {
+        //     if(collisions.length == 0 || collisions[0].distance >= 1.5) {
+        //         this.collision = false;
+        //         if (this.moving){
+        //             this.dX = +0.005;
+        //         }
+        //     }
+        // }
     }
 
 }
