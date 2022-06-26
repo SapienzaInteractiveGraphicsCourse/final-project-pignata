@@ -1,5 +1,5 @@
-import * as THREE from '../resources/three/build/three.module.js';
-import {Player, Animation} from "./Player.js"
+import * as THREE from './resources/three/build/three.module.js';
+import {Player} from "./Player.js"
 
 export class Astronaut extends Player {
     dX = 0.0;                                       // Increment of X Angle Rotation        

@@ -1,4 +1,3 @@
-import * as THREE from '../resources/three/build/three.module.js';
 import {Player} from "./Player.js"
 
 
