@@ -1,6 +1,6 @@
 ﻿# [IG] Final Project
 > Pignata Giovanni 1913547
-> https://github.com/SapienzaInteractiveGraphicsCourse/final-project-pignata
+> https://sapienzainteractivegraphicscourse.github.io/final-project-pignata/
 
 ## The Environment
 
