@@ -152,7 +152,7 @@ The user can interact with the scene in three different way: using the keyboard,
 
     
 
-- **GUI**:
+- **GUI**: The Top-Right Menu
 
   - **PlayerCam**: camera settings
     - fov: field of view.
