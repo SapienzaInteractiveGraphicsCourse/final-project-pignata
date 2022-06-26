@@ -13,7 +13,6 @@ export class Player {
 constructor(obj){
         this.name = obj.name;
         this.model = obj;
-        console.log(this.model.parent)
         this.root  = obj.getObjectByName('root')
         this.nodes = [];
         getChildrenNames(obj, this.nodes);

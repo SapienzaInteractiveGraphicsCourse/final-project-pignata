@@ -162,7 +162,4 @@ export class SpaceShip extends Player {
 		}
 		this.active = true
 	}
-
-
-
 }
