@@ -10,10 +10,8 @@
 
  In addition, I imported *dat.GUI*, a lightweight graphical user interface for changing variables in JavaScript. I used to allow the user to control some settings in the scenario.
 
-## The Scene: The Planetary System
+## The Scene
  The scene consists of a planet and two stars (light sources) that orbit around it. On the planet's surface, there are an astronaut (humanoid) and a spaceship, two animated hierarchical models. I entirely modeled the scene with the help of the official [3D editor](https://threejs.org/editor/), saved in the `scene.json` file, and imported it into the project during the initialization. 
-
-![scene](https://github.com/SapienzaInteractiveGraphicsCourse/final-project-pignata/blob/main/myModels/scene.png)
 
  When the web page is loaded, the user sees the scene through the `PlayerCam`, a camera that is initially fixed behind the back of the astronaut model, put on the north pole of the planet (assuming (0,1,0) as the North direction). In addition, **the user can control the animated movement** (Walk, TurnRight, TurnLeft, Jump) of this character on the surface of the planet. I implemented two versions of each animation, in order to simulate two different levels of gravity on the planet, that the user can control in the top-right menu. Without gravity, the astronaut's movements are slowed down in time and dilatated in space, as if it was walking on a zero-gravity planet, like the moon.
 
@@ -21,7 +19,11 @@
 
 All the models can be found in the [myModels](https://github.com/SapienzaInteractiveGraphicsCourse/final-project-pignata/myModels/) directory.
 
+### The Planet, the two stars, and the Universe
 
+![scene](https://github.com/SapienzaInteractiveGraphicsCourse/final-project-pignata/blob/main/myModels/scene.png)
+
+ All these four elements are spheres. The universe is rendered on the back side and it has an appropriate color texture, it contains the entire scene. Both the stars have the same emissive map, but different colors. On the planet, three different maps are applied: a color map, a displace map to cause an effect where the actual geometric position of points over the textured surface is displaced, giving a great sense of depth and detail,  and a normal map is used to add even more details (better shading) without using more polygons. On the planet's surface, some trees are located at random to give a reference point of the north pole.
 
 ### The Astronaut
 
@@ -33,6 +35,14 @@ All the models can be found in the [myModels](https://github.com/SapienzaInterac
 ## <img src="https://github.com/SapienzaInteractiveGraphicsCourse/final-project-pignata/blob/main/myModels/SpaceShip/images/spaceship.png" alt="spaceship" style="zoom:150%;" />
 
 The ship model is composed of 16 nodes, a camera and two lights, the `shipLight` , a *pointlight* located one unit up respect the camera (which position is set to (0,1.5,5) wrt the spaceship object space), and the `spotlight` located 0.5 units down wrt the ship center. A second "metallic" texture is applied on the ring, to give impression of a metallic surface.
+
+
+
+### The Mini Map
+
+ On the bottom-right of the canvas, it is possible to see a map of the planet (sphere), the three axes (x,y,z), and a yellow arrow that represents the player's position and its forward direction.
+
+
 
 ## The Scripts
 
